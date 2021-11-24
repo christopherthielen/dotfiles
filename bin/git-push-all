@@ -1,2 +1,0 @@
-#!/bin/sh
-git remote | xargs -L 1 git push

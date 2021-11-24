@@ -1,0 +1,33 @@
+if (has("termguicolors"))
+ set termguicolors
+endif
+
+set tabstop=2 shiftwidth=2 expandtab smarttab
+
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
+
+" Make sure you use single quotes
+:if v:progname == "nvim"
+:Plug 'neovim/nvim-lspconfig'
+:endif
+Plug 'tpope/vim-sensible'
+Plug 'https://github.com/pangloss/vim-javascript.git'
+Plug 'https://github.com/leafgarland/typescript-vim.git'
+Plug 'https://github.com/othree/yajs.vim'
+Plug 'https://github.com/othree/html5.vim'
+Plug 'https://github.com/HerringtonDarkholme/yats.vim'
+Plug 'mhartington/oceanic-next'
+Plug 'pedrohdz/vim-yaml-folds'
+
+" Initialize plugin system
+call plug#end()
+
+:if v:progname == "nvim"
+:lua require("lsp-config");
+:endif
+
+syntax enable
+colorscheme OceanicNext

@@ -9,5 +9,3 @@ alias cd..="cd .."
 
 # sort top by CPU by default
 alias top="top -o cpu"
-
-alias tf="tail -f"

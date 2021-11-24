@@ -16,4 +16,4 @@ defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
 
 # Showing and hiding sheets, resizing preference windows, zooming windows
 # float 0 doesn't work
-defaults write -g NSWindowResizeTime -float 0.001
+# defaults write -g NSWindowResizeTime -float 0.001
