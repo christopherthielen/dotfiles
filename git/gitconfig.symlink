@@ -23,6 +23,7 @@
     ci = commit
     br = branch
     sw = switch
+    st = status
 
     # list commands
     json = log --format='{ \"hashes\":{ \"commit\":\"%H\", \"tree\":\"%T\", \"parents\":\"%P\" }, \"author\":{ \"date\": \"%ai\", \"name\": \"%an\", \"email\":\"%ae\" }, \"committer\":{ \"date\": \"%ci\", \"name\": \"%cn\", \"email\":\"%ce\" } }'
