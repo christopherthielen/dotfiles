@@ -2,6 +2,7 @@ set -e
 
 JENV="$HOME/.jenv"
 JENV_VERSIONS="$JENV/versions"
+mkdir -p "$JENV"
 
 # cleanup to avoid intermittent failures from rehashing
 
