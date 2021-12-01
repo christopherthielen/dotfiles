@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-TOKEN=$(security find-generic-password -a GithubGraphQLToken -w);
+TOKEN=$(security find-generic-password -a $USER -s GithubGraphQLToken -w)
 
 if [ $? == 44 ] ; then
   echo "No GitHub token found in MacOS keychain.  Please generate one at https://github.com/settings/tokens and then enter it here"
