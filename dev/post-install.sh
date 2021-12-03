@@ -12,4 +12,4 @@ rm -rf "$JENV_VERSIONS" && mkdir -p "$JENV_VERSIONS"
 for java in $(find /Library/Java/JavaVirtualMachines -mindepth 1 -maxdepth 1 ! -type l); do yes | (jenv add "$java/Contents/Home" > /dev/null); done
 (jenv rehash &) 2> /dev/null
 
-sudo brew services start asimov
+brew services list | grep -q "^asimov *stopped" && sudo brew services start asimov
