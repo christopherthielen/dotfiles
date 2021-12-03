@@ -16,3 +16,4 @@ watch
 wget
 ykman
 zsh-autosuggestions
+zsh-syntax-highlighting
