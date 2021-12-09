@@ -10,6 +10,7 @@ jq
 mas
 parallel
 readline
+tag-ag
 the_silver_searcher
 tree
 watch
