@@ -1,10 +1,14 @@
 autojump
 bash
+bat
 coreutils
 curl
 dos2unix
+duf
 findutils
+fx
 gnu-sed
+htop
 httpie
 jq
 mas

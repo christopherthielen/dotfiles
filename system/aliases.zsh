@@ -9,3 +9,7 @@ alias cd..="cd .."
 
 # sort top by CPU by default
 alias top="top -o cpu"
+
+alias less="bat"
+alias json="fx"
+alias df="duf"
