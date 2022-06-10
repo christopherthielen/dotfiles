@@ -63,3 +63,6 @@
     plb = !prune-merged-pull-requests
     plb2 = !git remote prune origin && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
     plb3 = !git remote prune upstream && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
+[user]
+	email = github@sandgnat.com
+	name = Chris Thielen
