@@ -13,3 +13,7 @@ alias top="top -o cpu"
 alias less="bat"
 alias json="fx"
 alias df="duf"
+
+function brew2() {
+    HOMEBREW_NO_AUTO_UPDATE=1 brew "$@" && brew update
+}
