@@ -16,3 +16,6 @@ if brew services list | grep -q "^asimov *stopped" ; then
   sudo brew services start asimov
 fi
 
+# Install vim plugins
+luarocks install nvim-lspconfig
+nvim -c PlugInstall -c qa --headless

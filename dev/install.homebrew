@@ -8,6 +8,7 @@ gradle-completion
 jenv
 kotlin
 lazygit
+luarocks
 neovim
 node
 nvm
