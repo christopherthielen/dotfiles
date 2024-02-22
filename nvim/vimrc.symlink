@@ -1,0 +1,7 @@
+if (has("termguicolors"))
+ set termguicolors
+endif
+
+set list
+set listchars=tab:>-
+set tabstop=2 shiftwidth=2 expandtab
