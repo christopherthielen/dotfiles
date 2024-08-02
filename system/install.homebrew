@@ -11,6 +11,7 @@ gnu-sed
 htop
 httpie
 jq
+lsd
 mas
 parallel
 readline

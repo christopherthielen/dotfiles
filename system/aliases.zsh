@@ -1,8 +1,9 @@
 # overrides for ls
-alias ls="exa -F --group-directories-first --icons"
-alias l="ll -aa"
-alias la="ll -a"
-alias ll="ls -l --git --no-permissions --no-user --time-style=iso"
+alias ls="lsd"
+alias l="ls -l"
+alias la="ls -a"
+alias ll="ls -l"
+alias lt="ls --tree"
 
 # allow for common cd typo
 alias cd..="cd .."
