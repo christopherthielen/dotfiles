@@ -8,6 +8,7 @@ go
 gradle-completion
 jenv
 kotlin
+lazydocker
 lazygit
 luarocks
 neovim
