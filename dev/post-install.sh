@@ -11,4 +11,4 @@ nvim -c PlugInstall -c qa --headless
 # Configure "global yarn bin" directory for faster yarn plugin startup
 mkdir -p ~/.yarn
 [[ -e ~/.yarn/bin ]] && rm ~/.yarn/bin
-ln -s /opt/homebrew/bin ~/.yarn/bin
+ln -s "$HOMEBREW_PREFIX/bin" ~/.yarn/bin
