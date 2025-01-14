@@ -5,7 +5,7 @@ if brew services list | grep -q "^asimov *stopped" ; then
 fi
 
 # Install vim plugins
-luarocks install nvim-lspconfig
+sudo luarocks install nvim-lspconfig
 nvim -c PlugInstall -c qa --headless
 
 # Configure "global yarn bin" directory for faster yarn plugin startup

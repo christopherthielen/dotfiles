@@ -2,3 +2,4 @@
 # export GOPATH=~/Projects/go
 # export PATH=$GROOVY_HOME/bin:$GOPATH/bin:$PATH
 
+export PATH="$HOME/go/bin:$PATH"

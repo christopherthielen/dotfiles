@@ -1,0 +1,1 @@
+source <(fx --comp zsh)
