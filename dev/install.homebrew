@@ -1,6 +1,7 @@
 asimov
 awscli
 fd
+fnm
 fswatch
 fzf
 gh
@@ -12,7 +13,6 @@ lazydocker
 lazygit
 luarocks
 node
-nvm
 postgresql
 pstree
 ruby
