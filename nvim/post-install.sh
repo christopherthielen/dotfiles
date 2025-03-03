@@ -6,7 +6,15 @@ if [[ -e "$KICKSTART_PATH/.git" ]] ; then
   git pull --rebase
   popd
 elif [[ -e "$KICKSTART_PATH" ]] ; then
-  echo WARNING: Cannot install nvim-lua/kickstart.nvim because $KICKSTART_PATH already has files
+  echo WARNING: Cannot clone nvim-lua/kickstart.nvim because $KICKSTART_PATH already has files
+  CLONE="$KICKSTART_PATH/clone";
+  mkdir "$CLONE"
+  git clone https://github.com/nvim-lua/kickstart.nvim.git "$CLONE"
+  mv "$CLONE/.git" "$KICKSTART_PATH";
+  rm -rf "$CLONE"
+  pushd "$KICKSTART_PATH";
+  git checkout .
+  popd
 else
   git clone https://github.com/nvim-lua/kickstart.nvim.git "$KICKSTART_PATH"
 fi
