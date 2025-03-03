@@ -19,15 +19,16 @@ else
   git clone https://github.com/nvim-lua/kickstart.nvim.git "$KICKSTART_PATH"
 fi
 
+INITLUA="$KICKSTART_PATH/init.lua";
 # Enable custom plugin loading from ~/.config/nvim/lua/custom/plugins/
-sed -i '' "/^  -- { import = 'custom.plugins' }/s/-- //" "$KICKSTART_PATH/init.lua"
+perl -pi -e "s/-- // if /^  -- { import = 'custom.plugins' }/" "$INITLUA"
 # Enable neo-tree
-sed -i '' "/^vim.g.have_nerd_font = false/s/false/true/" "$KICKSTART_PATH/init.lua"
-sed -i '' "/^  -- require 'kickstart.plugins.neo-tree/s/--//"  "$KICKSTART_PATH/init.lua"
+perl -pi -e "s/false/true/ if /^vim.g.have_nerd_font = false/" "$INITLUA"
+perl -pi -e "s/-- // if /^  -- require 'kickstart.plugins.neo-tree/" "$INITLUA"
 # Enable other plugins kickstart includes
-sed -i '' "/^  -- require 'kickstart.plugins.indent_line/s/--//"  "$KICKSTART_PATH/init.lua"
-sed -i '' "/^  -- require 'kickstart.plugins.lint/s/--//"  "$KICKSTART_PATH/init.lua"
-sed -i '' "/^  -- require 'kickstart.plugins.autopairs/s/--//"  "$KICKSTART_PATH/init.lua"
+perl -pi -e "s/-- // if /^  -- require 'kickstart.plugins.indent_line/" "$INITLUA"
+perl -pi -e "s/-- // if /^  -- require 'kickstart.plugins.lint/" "$INITLUA"
+perl -pi -e "s/-- // if /^  -- require 'kickstart.plugins.autopairs/" "$INITLUA"
 
 nvim --headless "+Lazy! sync" +qa
 
