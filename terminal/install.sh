@@ -1,3 +1,3 @@
 if [ "$(uname)" = "Linux" ] ; then
-  cargo install starship
+  curl -sS https://starship.rs/install.sh | FORCE=true sh
 fi
