@@ -6,9 +6,11 @@ curl
 dos2unix
 duf
 findutils
+fuse
 htop
 httpie
 jq
+libfuse2
 parallel
 ripgrep
 silversearcher-ag
