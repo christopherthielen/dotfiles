@@ -1,0 +1,1 @@
+https://github.com/jeffreytse/zsh-vi-mode
