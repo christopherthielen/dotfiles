@@ -1,20 +1,5 @@
-autojump
-bash
-bat
-coreutils
-curl
-dos2unix
-duf
-findutils
+# System libraries not available via Homebrew
+# Most packages are installed via install.linuxbrew instead
 fuse
-htop
-httpie
-jq
 libfuse2
-parallel
-ripgrep
-silversearcher-ag
-tree
-watch
-wget
 yubikey-manager
