@@ -1,0 +1,82 @@
+#!/bin/bash
+# Install packages via Homebrew (macOS/Linux) and apt (Linux)
+# Package lists defined in .chezmoidata/packages.toml
+# This script runs when its contents change (hash-based)
+
+set -e
+
+export HOMEBREW_NO_ENV_HINTS=1
+
+echo "Installing packages..."
+
+# =============================================================================
+# CROSS-PLATFORM: Homebrew/Linuxbrew common packages
+# =============================================================================
+
+if command -v brew &>/dev/null; then
+    echo ""
+    echo "=== Installing common Homebrew formulae ==="
+    {{ range .brew.common.formulae }}
+    brew install {{ . }} 2>/dev/null || echo "Note: {{ . }} already installed or failed"
+    {{- end }}
+fi
+
+{{ if eq .chezmoi.os "darwin" -}}
+# =============================================================================
+# macOS: Taps, formulae, casks, and Mac App Store
+# =============================================================================
+
+echo ""
+echo "=== Setting up Homebrew taps ==="
+{{ range .darwin.brew.taps }}
+brew tap {{ . }} 2>/dev/null || true
+{{- end }}
+
+echo ""
+echo "=== Installing macOS Homebrew formulae ==="
+{{ range .darwin.brew.formulae }}
+brew install {{ . }} 2>/dev/null || echo "Note: {{ . }} already installed or failed"
+{{- end }}
+
+echo ""
+echo "=== Installing macOS casks ==="
+{{ range .darwin.brew.casks }}
+if ! brew list --cask {{ . }} &>/dev/null; then
+    brew install --cask {{ . }} || echo "Note: {{ . }} failed to install"
+fi
+{{- end }}
+
+echo ""
+echo "=== Installing Mac App Store apps ==="
+if command -v mas &>/dev/null; then
+    {{ range .darwin.mas.apps }}
+    mas install {{ .id }} 2>/dev/null || echo "Note: {{ .name }} ({{ .id }}) already installed or failed"
+    {{- end }}
+fi
+
+{{ else if eq .chezmoi.os "linux" -}}
+# =============================================================================
+# Linux: apt packages and Linux-specific brew formulae
+# =============================================================================
+
+echo ""
+echo "=== Installing apt packages ==="
+if command -v apt-get &>/dev/null; then
+    sudo apt-get update -qq
+    {{ range .linux.apt.packages }}
+    sudo apt-get install -y {{ . }} 2>/dev/null || echo "Note: {{ . }} failed"
+    {{- end }}
+fi
+
+echo ""
+echo "=== Installing Linux-specific Homebrew formulae ==="
+if command -v brew &>/dev/null; then
+    {{ range .linux.brew.formulae }}
+    brew install {{ . }} 2>/dev/null || echo "Note: {{ . }} already installed or failed"
+    {{- end }}
+fi
+
+{{ end -}}
+
+echo ""
+echo "=== Package installation complete! ==="

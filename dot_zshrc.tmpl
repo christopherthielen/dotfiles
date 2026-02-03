@@ -1,0 +1,101 @@
+# chezmoi-managed zshrc
+# Generated for {{ .chezmoi.os }}/{{ .chezmoi.arch }} on {{ .chezmoi.hostname }}
+
+# Profiling (set DOTFILES_PROFILE_ZSHRC=true to enable)
+if [[ "$DOTFILES_PROFILE_ZSHRC" == true ]]; then
+    PS4=$'%D{%M%S%.} %N:%i> '
+    exec 3>&2 2> /tmp/startlog.$$
+    setopt xtrace prompt_subst
+fi
+
+# Path configuration
+{{- if eq .chezmoi.os "darwin" }}
+{{-   if eq .chezmoi.arch "arm64" }}
+export HOMEBREW_PREFIX="/opt/homebrew"
+{{-   else }}
+export HOMEBREW_PREFIX="/usr/local"
+{{-   end }}
+eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
+{{- else if eq .chezmoi.os "linux" }}
+if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{- end }}
+
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+
+export DEFAULT_USER=$(whoami)
+
+# =============================================================================
+# Zinit Plugin Manager
+# =============================================================================
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# Auto-install zinit if not present
+if [[ ! -d "$ZINIT_HOME" ]]; then
+    print -P "%F{33}Installing zinit...%f"
+    mkdir -p "$(dirname $ZINIT_HOME)"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+# Initialize completion system early (before plugins that use compdef)
+autoload -Uz compinit && compinit
+zinit cdreplay -q
+
+# Oh-My-Zsh core libs (provides essential zsh functionality)
+zinit snippet OMZL::completion.zsh
+zinit snippet OMZL::directories.zsh
+zinit snippet OMZL::git.zsh
+zinit snippet OMZL::history.zsh
+zinit snippet OMZL::key-bindings.zsh
+
+# Oh-My-Zsh plugins (turbo mode: loaded after prompt for faster startup)
+zinit wait lucid for \
+    OMZP::git \
+    OMZP::docker \
+    OMZP::sudo \
+    OMZP::node \
+    OMZP::npm \
+    OMZP::yarn \
+    OMZP::fzf
+{{- if eq .chezmoi.os "darwin" }}
+zinit wait lucid for \
+    OMZP::brew
+{{- end }}
+
+# Third-party plugins
+# zsh-vi-mode: loaded early (not deferred) for immediate vi keybindings
+zinit light jeffreytse/zsh-vi-mode
+
+# Fix Ctrl-[ for terminals using CSI u encoding (Ghostty, Kitty, VS Code)
+# These terminals send ^[[91;5u instead of ^[ for Ctrl-[
+function zvm_after_init() {
+    # Use zvm's handler to properly update cursor style
+    bindkey -M viins '^[[91;5u' zvm_exit_insert_mode
+    bindkey -M vicmd '^[[91;5u' undefined-key  # no-op in normal mode
+}
+
+# Syntax highlighting and autosuggestions (load last, deferred)
+zinit wait lucid for \
+    atload"_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions \
+    zsh-users/zsh-syntax-highlighting
+
+# Disable shared history across terminals
+unsetopt SHARE_HISTORY
+
+# Source additional config files
+for conf in "$HOME/.config/zsh/"*.zsh; do
+    [[ -f "$conf" ]] && source "$conf"
+done
+
+# Local overrides (not managed by chezmoi)
+[[ -f "$HOME/.localrc" ]] && source "$HOME/.localrc"
+
+# Profiling end
+if [[ "$DOTFILES_PROFILE_ZSHRC" == true ]]; then
+    unsetopt xtrace
+    exec 2>&3 3>&-
+fi

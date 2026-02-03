@@ -1,0 +1,37 @@
+encryption = "age"
+
+{{- /* Prompt for machine type on first init */ -}}
+{{- $isWork := false -}}
+{{- $email := "github@sandgnat.com" -}}
+{{- $name := "Chris Thielen" -}}
+
+{{- /* Detect if this looks like a work machine */ -}}
+{{- if or (eq .chezmoi.hostname "lappy486") (stat (joinPath .chezmoi.homeDir ".metatron")) -}}
+{{-   $isWork = true -}}
+{{- end -}}
+
+{{- /* Interactive prompts if stdin is available */ -}}
+{{- if stdinIsATTY -}}
+{{-   $isWork = promptBoolOnce . "isWork" "Is this a work machine" $isWork -}}
+{{-   if $isWork -}}
+{{-     $email = promptStringOnce . "email" "Work email address" "" -}}
+{{-   else -}}
+{{-     $email = promptStringOnce . "email" "Personal email address" "github@sandgnat.com" -}}
+{{-   end -}}
+{{-   $name = promptStringOnce . "name" "Full name" $name -}}
+{{- end }}
+
+[data]
+    isWork = {{ $isWork }}
+    email = {{ $email | quote }}
+    name = {{ $name | quote }}
+
+[edit]
+    command = "nvim"
+
+[diff]
+    pager = "diff-so-fancy"
+
+[age]
+    identity = "~/.config/chezmoi/key.txt"
+    recipient = "age1tj524xyk87z7030chw2g039dcynjt2ptt2gm53xetqdwu7un7f9ssr2lfe"

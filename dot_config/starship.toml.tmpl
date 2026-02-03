@@ -1,0 +1,22 @@
+# Starship prompt configuration
+# https://starship.rs/config/
+{{- if .isWork }}
+
+# Disable default container module (we use custom.container instead)
+[container]
+disabled = true
+
+# Custom container indicator: shows [Docker/Coder] if CODER=true, else [Docker]
+[custom.container]
+command = '''
+if [[ "$CODER" == "true" ]]; then
+  echo "Docker/Coder"
+elif [[ -f /.dockerenv ]]; then
+  echo "Docker"
+fi
+'''
+when = '[[ -f /.dockerenv ]]'
+format = "⬢ [$output]($style) "
+style = "bold blue"
+shell = ["bash", "--noprofile", "--norc"]
+{{- end }}

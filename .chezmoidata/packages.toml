@@ -1,0 +1,146 @@
+# Package definitions for chezmoi dotfiles
+# All packages listed here have pre-built bottles for both macOS and Linux
+# unless noted in platform-specific sections.
+
+# ============================================================================
+# CROSS-PLATFORM: Homebrew/Linuxbrew (bottles available for macOS + Linux)
+# ============================================================================
+[brew.common]
+formulae = [
+    # Shell & Terminal
+    "autojump",         # Directory jumping
+    "bat",              # Better cat
+    "lsd",              # Better ls
+    "mcfly",            # Shell history search
+    "ripgrep",          # Better grep
+    "starship",         # Cross-shell prompt
+    "zsh",              # Shell
+
+    # Development tools
+    "fd",               # Better find
+    "fnm",              # Fast Node Manager
+    "fzf",              # Fuzzy finder
+    "gh",               # GitHub CLI
+    "jq",               # JSON processor
+    "lazydocker",       # Docker TUI
+    "lazygit",          # Git TUI
+    "neovim",           # Editor
+
+    # Git
+    "diff-so-fancy",    # Better git diffs
+    "git",              # Version control
+    "git-lfs",          # Large file storage
+
+    # Utilities
+    "curl",             # HTTP client
+    "htop",             # Process viewer
+    "tree",             # Directory tree
+    "watch",            # Run commands periodically
+    "wget",             # HTTP client
+]
+
+# ============================================================================
+# macOS ONLY
+# ============================================================================
+[darwin.brew]
+taps = [
+    "christopherthielen/tag-ag",
+]
+
+formulae = [
+    # macOS-specific tools
+    "asimov",           # Exclude dev dirs from Time Machine
+    "coreutils",        # GNU coreutils
+    "dos2unix",         # Line ending conversion
+    "findutils",        # GNU find
+    "fx",               # JSON viewer (uses node dep, complex on linux)
+    "gnu-sed",          # GNU sed
+    "httpie",           # HTTP client
+    "mas",              # Mac App Store CLI
+    "parallel",         # Parallel execution
+
+    # Development
+    "fswatch",          # File watcher
+    "go",               # Go language
+    "gradle-completion", # Gradle completions
+    "jenv",             # Java version manager
+    "kotlin",           # Kotlin language
+    "luarocks",         # Lua package manager
+    "node",             # Node.js
+    "postgresql",       # Database
+    "pstree",           # Process tree
+    "ruby",             # Ruby language
+    "rust",             # Rust language
+    "tag-ag",           # Tag + silver searcher (custom tap)
+    "the_silver_searcher", # ag
+    "yarn",             # JS package manager
+    "ykman",            # Yubikey manager
+]
+
+casks = [
+    # Terminals
+    "ghostty",
+    "iterm2",
+
+    # Development
+    "docker",
+    "jetbrains-toolbox",
+    "vimr",
+    "visual-studio-code",
+
+    # Productivity
+    "raycast",
+    "rectangle-pro",
+
+    # Communication
+    "discord",
+    "slack",
+
+    # Browsers
+    "firefox",
+    "google-chrome",
+
+    # System
+    "dropbox",
+    "easy-move-plus-resize",
+    "google-drive",
+    "istat-menus",
+    "kap",
+    "keycastr",
+    "soundsource",
+    "spotify",
+]
+
+[darwin.mas]
+# Mac App Store apps: { id = "...", name = "..." }
+apps = [
+    { id = "1352778147", name = "Bitwarden" },
+    { id = "1452453066", name = "Hidden Bar" },
+]
+
+# ============================================================================
+# LINUX ONLY
+# ============================================================================
+[linux.apt]
+# Core system packages - faster from apt, or not in Homebrew
+packages = [
+    "build-essential",  # Compiler toolchain (required for some brew installs)
+    "libfuse2",         # FUSE library (for AppImages if needed)
+    "zsh",              # Shell (faster from apt)
+]
+
+[linux.brew]
+# Additional formulae for Linux (beyond common)
+# These have Linux bottles and aren't in apt or are better from brew
+formulae = [
+    "fx",               # JSON viewer
+    "go",               # Go language (needed to install tag)
+    "the_silver_searcher", # ag
+]
+
+[linux.scripts]
+# Tools requiring manual installation (no bottle, not in apt)
+# Handled by run_once_after_install-linux-extras.sh.tmpl
+manual = [
+    "tag",              # Installed via: go install github.com/christopherthielen/tag@latest
+]

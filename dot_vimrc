@@ -1,0 +1,6 @@
+if (has("termguicolors"))
+    set termguicolors
+endif
+
+set tabstop=2 shiftwidth=2 expandtab
+au BufReadPost,BufNewFile yarn.lock set filetype=text

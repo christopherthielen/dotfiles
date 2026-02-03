@@ -1,0 +1,45 @@
+# Aliases managed by chezmoi
+
+# ls replacements (using lsd)
+if (( $+commands[lsd] )); then
+    alias ls="lsd"
+    alias l="ls -l"
+    alias la="ls -a"
+    alias ll="ls -l"
+    alias lt="ls --tree"
+fi
+
+# Common typos
+alias cd..="cd .."
+
+# Better defaults
+{{- if eq .chezmoi.os "darwin" }}
+alias top="top -o cpu"
+{{- end }}
+
+# Modern CLI tools
+(( $+commands[bat] )) && alias less="bat"
+(( $+commands[fx] )) && alias json="fx"
+(( $+commands[duf] )) && alias df="duf"
+
+# Brew helper
+function brew2() {
+    HOMEBREW_NO_AUTO_UPDATE=1 brew "$@" && brew update
+}
+
+# Nvim
+if (( $+commands[nvim] )); then
+    alias vi="nvim"
+    alias vim="nvim"
+fi
+
+# Lazygit
+(( $+commands[lazygit] )) && alias lg="lazygit"
+
+# fd is named fdfind on Linux
+{{- if eq .chezmoi.os "linux" }}
+(( $+commands[fdfind] )) && alias fd="fdfind"
+{{- end }}
+
+# nvm compatibility alias (using fnm)
+(( $+commands[fnm] )) && alias nvm="fnm"

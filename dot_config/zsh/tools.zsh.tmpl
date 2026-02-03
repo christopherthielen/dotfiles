@@ -1,0 +1,70 @@
+# Tool integrations managed by chezmoi
+
+# Environment
+export EDITOR="nvim"
+export NODE_OPTIONS=--max-old-space-size=8192
+export GREP_COLOR='1;31'
+
+# fnm (Node version manager)
+if (( $+commands[fnm] )); then
+    eval "$(fnm env --use-on-cd --shell zsh)"
+    eval "$(fnm completions --shell zsh)"
+fi
+
+# fzf (fuzzy finder)
+if (( $+commands[fzf] )); then
+    source <(fzf --zsh)
+fi
+
+# Starship prompt
+if (( $+commands[starship] )); then
+    eval "$(starship init zsh)"
+else
+    echo '[chezmoi] starship not found, please install it from https://starship.rs'
+fi
+
+# autojump - check multiple possible locations
+{{- if eq .chezmoi.os "darwin" }}
+[[ -s /opt/homebrew/etc/profile.d/autojump.sh ]] && source /opt/homebrew/etc/profile.d/autojump.sh
+[[ -s /usr/local/etc/profile.d/autojump.sh ]] && source /usr/local/etc/profile.d/autojump.sh
+{{- else }}
+[[ -s /usr/share/autojump/autojump.sh ]] && source /usr/share/autojump/autojump.sh
+[[ -s /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ]] && source /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
+{{- end }}
+
+# dircolors (solarized)
+if [[ -f "$HOME/.dircolors-solarized/dircolors.256dark" ]]; then
+{{- if eq .chezmoi.os "darwin" }}
+    eval "$(gdircolors "$HOME/.dircolors-solarized/dircolors.256dark")"
+{{- else }}
+    eval "$(dircolors "$HOME/.dircolors-solarized/dircolors.256dark")"
+{{- end }}
+fi
+
+# gh (GitHub CLI) completions
+if (( $+commands[gh] )); then
+    eval "$(gh completion -s zsh)"
+fi
+
+# mcfly (history search)
+if (( $+commands[mcfly] )); then
+    export MCFLY_FUZZY=3
+    eval "$(mcfly init zsh)"
+fi
+
+# fx (JSON viewer) completions
+if (( $+commands[fx] )); then
+    source <(fx --comp zsh)
+fi
+
+# tag-ag integration
+if (( $+commands[tag] )); then
+    export TAG_SEARCH_PROG=ag
+    tag() { command tag "$@"; source "${TAG_ALIAS_FILE:-/tmp/tag_aliases}" 2>/dev/null }
+    alias ag=tag
+fi
+
+# iTerm2 shell integration
+{{- if eq .chezmoi.os "darwin" }}
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+{{- end }}

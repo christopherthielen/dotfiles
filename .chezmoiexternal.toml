@@ -1,0 +1,16 @@
+# External dependencies managed by chezmoi
+# Run `chezmoi apply -R` to force refresh all externals
+
+# Note: zsh plugins managed by zinit (auto-installs in .zshrc)
+
+# Kickstart.nvim configuration (cloned to ~/.kickstart.nvim, symlinked to ~/.config/nvim)
+[".kickstart.nvim"]
+    type = "git-repo"
+    url = "https://github.com/christopherthielen/kickstart.nvim.git"
+    refreshPeriod = "168h"
+
+# dircolors-solarized for terminal colors
+[".dircolors-solarized"]
+    type = "git-repo"
+    url = "https://github.com/seebi/dircolors-solarized.git"
+    refreshPeriod = "168h"
