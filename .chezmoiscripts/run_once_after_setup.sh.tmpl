@@ -17,4 +17,10 @@ if command -v git-lfs &>/dev/null; then
     git lfs install 2>/dev/null || true
 fi
 
+# Initialize neovim plugins
+if command -v nvim &>/dev/null; then
+    echo "Initializing neovim plugins..."
+    nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+fi
+
 echo "One-time setup complete!"

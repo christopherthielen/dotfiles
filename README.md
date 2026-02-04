@@ -5,7 +5,7 @@ Personal dotfiles managed with [chezmoi](https://chezmoi.io/).
 ## Quick Start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash bootstrap.sh
+curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash bootstrap.sh && zsh
 ```
 
 This will prompt for your age key, install Homebrew, and apply all dotfiles.
