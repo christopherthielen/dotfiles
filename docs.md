@@ -29,7 +29,8 @@
 ├── run_onchange_install-packages.sh.tmpl   # Install brew/apt packages
 ├── run_onchange_after_install-extras_linux.sh  # Linux-specific extras (tag)
 ├── run_once_defaults_darwin.sh     # macOS defaults (key repeat, etc.)
-└── run_once_after_post-install.sh.tmpl     # git-lfs, nvim plugins
+├── run_once_after_setup.sh.tmpl    # One-time: asimov, git-lfs
+└── run_after_update-kickstart.sh   # Sync kickstart.nvim (every apply)
 ```
 
 ## Naming Conventions
@@ -42,9 +43,9 @@
 | `symlink_` | Creates a symlink |
 | `encrypted_` | Decrypted on apply (needs age key) |
 | `run_before_` | Script runs before files are copied |
+| `run_after_` | Script runs after files are copied (every apply) |
 | `run_once_` | Script runs once per machine |
 | `run_onchange_` | Script runs when its content changes |
-| `run_once_after_` | Runs after other run_once scripts |
 | `_darwin` | Only applies on macOS |
 | `_linux` | Only applies on Linux |
 | `.tmpl` | Template - processed with Go text/template |
