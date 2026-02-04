@@ -110,22 +110,24 @@ dot_zshrc_darwin.tmpl    # macOS only
 ## Bootstrapping a New Machine
 
 ```bash
-# One-liner to bootstrap (downloads chezmoi + applies your dotfiles)
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply yourgithub/dotfiles
-
-# Or step by step:
-brew install chezmoi
-chezmoi init yourgithub/dotfiles   # Clones to ~/.local/share/chezmoi
-chezmoi diff                        # Preview changes
-chezmoi apply                       # Apply changes
+# One-liner (prompts for age key, installs Homebrew, applies dotfiles)
+curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash bootstrap.sh
 ```
 
-On first `init`, the `.chezmoi.toml.tmpl` prompts for:
-- Is this a work machine?
-- Email address
-- Full name
+**What bootstrap.sh does:**
+1. Prompts for your age encryption key (for secrets)
+2. Downloads chezmoi standalone binary
+3. Runs `chezmoi init --apply` which:
+   - Installs Homebrew via `run_before_bootstrap_{os}.sh`
+   - Prompts for work/personal, email, name
+   - Applies all dotfiles and runs install scripts
 
-These values are saved to `~/.config/chezmoi/chezmoi.toml` and used for templating.
+**Manual workflow (if already bootstrapped):**
+```bash
+chezmoi update    # Pull latest + apply
+chezmoi diff      # Preview changes
+chezmoi apply     # Apply changes
+```
 
 ## Package Management
 
