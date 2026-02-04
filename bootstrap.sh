@@ -39,7 +39,7 @@ echo "Downloading chezmoi and applying dotfiles..."
 echo "(This will install Homebrew if needed)"
 echo ""
 
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply christopherthielen/dotfiles --branch main
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin" init --apply christopherthielen/dotfiles --branch main
 
 echo ""
 echo "=========================================="
