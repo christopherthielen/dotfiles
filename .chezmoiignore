@@ -1,8 +1,6 @@
 # Files to ignore (not apply to home directory)
 README.md
 LICENSE
-docs.md
-test-docker-linux.sh
 bootstrap.sh
 
 # OS-specific ignores
