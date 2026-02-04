@@ -146,23 +146,95 @@ run_once_defaults_darwin.sh      # macOS only
 ## Bootstrapping a New Machine
 
 ```bash
-# One-liner (prompts for age key, installs Homebrew, applies dotfiles)
-curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash bootstrap.sh
+# One-liner (prompts for age key, installs everything, launches zsh)
+curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash bootstrap.sh && zsh
 ```
 
-**What bootstrap.sh does:**
-1. Prompts for your age encryption key (for secrets)
-2. Downloads chezmoi standalone binary
-3. Runs `chezmoi init --apply` which:
-   - Installs Homebrew via `run_before_bootstrap_{os}.sh`
-   - Prompts for work/personal, email, name
-   - Applies all dotfiles and runs install scripts
+### Order of Operations
 
-**Manual workflow (if already bootstrapped):**
+The bootstrap process follows this sequence:
+
+#### 1. `bootstrap.sh` (Entry Point)
+- Prompts for your **age encryption key** (paste from Bitwarden, Ctrl+D to save)
+- Saves key to `~/.config/chezmoi/key.txt`
+- Downloads chezmoi binary to `~/.local/bin/chezmoi`
+- Runs `chezmoi init --apply christopherthielen/dotfiles`
+
+#### 2. `chezmoi init` Phase
+- Clones this repo to `~/.local/share/chezmoi`
+- Processes `.chezmoi.toml.tmpl` → prompts for:
+  - **Is this a work machine?** (auto-detects based on hostname/metatron)
+  - **Email address** (work or personal default)
+  - **Full name**
+- Saves answers to `~/.config/chezmoi/chezmoi.toml`
+
+#### 3. `run_before_` Scripts (Before Files Are Copied)
+Scripts run in alphabetical order, filtered by OS guards:
+
+| Script | OS | Purpose |
+|--------|-----|---------|
+| `run_before_bootstrap_darwin.sh` | macOS | Install Homebrew to `/opt/homebrew` or `/usr/local` |
+| `run_before_bootstrap_linux.sh` | Linux | Install apt prerequisites + Linuxbrew to `/home/linuxbrew/.linuxbrew` |
+
+#### 4. File Application
+Chezmoi applies all dotfiles:
+- Templates (`.tmpl`) are rendered with your config data
+- Encrypted files (`.age`) are decrypted using your age key
+- Symlinks are created (e.g., `~/.config/nvim` → `~/.kickstart.nvim`)
+- External repos are cloned (`.chezmoiexternal.toml` → kickstart.nvim)
+
+#### 5. `run_onchange_` Scripts (When Content Changes)
+These run when the script content (or referenced data) changes:
+
+| Script | Purpose |
+|--------|---------|
+| `run_onchange_install-packages.sh.tmpl` | Install brew formulae, casks, apt packages from `packages.toml` |
+| `run_onchange_after_install-extras_linux.sh` | Install Linux tools not in package managers (e.g., `tag` via `go install`) |
+
+#### 6. `run_once_` Scripts (First Time Only)
+These run exactly once per machine (tracked by chezmoi state):
+
+| Script | OS | Purpose |
+|--------|-----|---------|
+| `run_once_defaults_darwin.sh` | macOS | Set macOS defaults (key repeat, show ~/Library, etc.) |
+| `run_once_after_setup.sh.tmpl` | All | Configure git-lfs, start asimov (macOS), initialize neovim plugins |
+
+#### 7. `run_after_` Scripts (Every Apply)
+| Script | Purpose |
+|--------|---------|
+| `run_after_update-kickstart.sh` | Sync kickstart.nvim with upstream changes |
+
+#### 8. First Shell Launch (`zsh`)
+When you start zsh for the first time:
+- **zinit** auto-installs (plugin manager)
+- OMZ snippets and plugins download
+- **fnm** installs the configured Node.js version
+- **mcfly** imports shell history
+
+### Script Execution Summary
+
+```
+bootstrap.sh
+    └── chezmoi init --apply
+            ├── .chezmoi.toml.tmpl          → prompts for config
+            ├── run_before_bootstrap_*.sh   → install Homebrew
+            ├── [apply all dotfiles]        → templates, symlinks, externals
+            ├── run_onchange_install-packages.sh.tmpl  → brew/apt packages
+            ├── run_onchange_after_install-extras_linux.sh  → Linux extras
+            ├── run_once_defaults_darwin.sh → macOS defaults
+            ├── run_once_after_setup.sh.tmpl → git-lfs, nvim plugins
+            └── run_after_update-kickstart.sh → sync kickstart.nvim
+zsh (first launch)
+    └── zinit, fnm, mcfly initialize
+```
+
+### Manual Workflow (After Bootstrap)
+
 ```bash
-chezmoi update    # Pull latest + apply
-chezmoi diff      # Preview changes
+chezmoi update    # Pull latest from git + apply
+chezmoi diff      # Preview what would change
 chezmoi apply     # Apply changes
+chezmoi edit ~/.zshrc  # Edit and auto-apply
 ```
 
 ## Package Management
