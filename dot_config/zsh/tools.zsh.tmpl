@@ -11,11 +11,6 @@ if (( $+commands[fnm] )); then
     eval "$(fnm completions --shell zsh)"
 fi
 
-# fzf (fuzzy finder)
-if (( $+commands[fzf] )); then
-    source <(fzf --zsh)
-fi
-
 # Starship prompt
 if (( $+commands[starship] )); then
     eval "$(starship init zsh)"
@@ -31,15 +26,6 @@ fi
 [[ -s /usr/share/autojump/autojump.sh ]] && source /usr/share/autojump/autojump.sh
 [[ -s /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ]] && source /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
 {{- end }}
-
-# dircolors (solarized)
-if [[ -f "$HOME/.dircolors-solarized/dircolors.256dark" ]]; then
-{{- if eq .chezmoi.os "darwin" }}
-    eval "$(gdircolors "$HOME/.dircolors-solarized/dircolors.256dark")"
-{{- else }}
-    eval "$(dircolors "$HOME/.dircolors-solarized/dircolors.256dark")"
-{{- end }}
-fi
 
 # gh (GitHub CLI) completions
 if (( $+commands[gh] )); then

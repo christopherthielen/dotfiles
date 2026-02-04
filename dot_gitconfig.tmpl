@@ -133,7 +133,6 @@
 
     # Prunes Local Branches that track a remote, where the remote branch has been deleted
     plb = !git remote prune origin && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
-    plb2 = !prune-merged-pull-requests
     plb3 = !git remote prune upstream && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
 
 {{- if .isWork }}

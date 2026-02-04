@@ -1,7 +1,0 @@
-{{- if eq .chezmoi.os "darwin" -}}
-#!/usr/bin/env bash
-
-TAB_ID=$(chrome-cli open 'chrome://inspect/#devices' -n | head -n 1 | awk '{ print $2 }')
-sleep 2.5
-chrome-cli execute "chrome.send('open-node-frontend');" -t "$TAB_ID" && sleep 1 && chrome-cli close -t "$TAB_ID"
-{{- end }}

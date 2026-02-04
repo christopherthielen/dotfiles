@@ -12,7 +12,6 @@ formulae = [
     "bat",              # Better cat
     "lsd",              # Better ls
     "mcfly",            # Shell history search
-    "ripgrep",          # Better grep
     "starship",         # Cross-shell prompt
     "zsh",              # Shell
 
@@ -51,7 +50,6 @@ formulae = [
     # macOS-specific tools
     "asimov",           # Exclude dev dirs from Time Machine
     "coreutils",        # GNU coreutils
-    "dos2unix",         # Line ending conversion
     "findutils",        # GNU find
     "fx",               # JSON viewer (uses node dep, complex on linux)
     "gnu-sed",          # GNU sed
@@ -62,12 +60,10 @@ formulae = [
     # Development
     "fswatch",          # File watcher
     "go",               # Go language
-    "gradle-completion", # Gradle completions
     "jenv",             # Java version manager
     "kotlin",           # Kotlin language
     "luarocks",         # Lua package manager
     "node",             # Node.js
-    "postgresql",       # Database
     "pstree",           # Process tree
     "ruby",             # Ruby language
     "rust",             # Rust language
@@ -83,7 +79,6 @@ casks = [
 
     # Development
     "docker",
-    "jetbrains-toolbox",
     "vimr",
     "visual-studio-code",
 

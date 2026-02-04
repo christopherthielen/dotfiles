@@ -9,18 +9,6 @@ if command -v brew &>/dev/null && brew services list | grep -q "^asimov *stopped
     echo "Starting asimov service..."
     sudo brew services start asimov
 fi
-
-# Configure "global yarn bin" directory for faster yarn plugin startup
-{{- if eq .chezmoi.arch "arm64" }}
-HOMEBREW_PREFIX="/opt/homebrew"
-{{- else }}
-HOMEBREW_PREFIX="/usr/local"
-{{- end }}
-mkdir -p ~/.yarn
-if [[ -e ~/.yarn/bin ]]; then
-    rm ~/.yarn/bin
-fi
-ln -sf "$HOMEBREW_PREFIX/bin" ~/.yarn/bin
 {{- end }}
 
 # Configure git-lfs

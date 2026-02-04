@@ -13,9 +13,7 @@ fi
 alias cd..="cd .."
 
 # Better defaults
-{{- if eq .chezmoi.os "darwin" }}
-alias top="top -o cpu"
-{{- end }}
+(( $+commands[htop] )) && alias top="htop"
 
 # Modern CLI tools
 (( $+commands[bat] )) && alias less="bat"
