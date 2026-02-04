@@ -24,13 +24,14 @@
 ├── bin/
 │   └── executable_killport         # Kill process on port
 ├── encrypted_*.age                 # Encrypted work configs and secrets
-├── run_before_bootstrap_darwin.sh  # Install Homebrew (macOS)
-├── run_before_bootstrap_linux.sh   # Install apt prereqs + Linuxbrew
-├── run_onchange_install-packages.sh.tmpl   # Install brew/apt packages
-├── run_onchange_after_install-extras_linux.sh  # Linux-specific extras (tag)
-├── run_once_defaults_darwin.sh     # macOS defaults (key repeat, etc.)
-├── run_once_after_setup.sh.tmpl    # One-time: asimov, git-lfs
-└── run_after_update-kickstart.sh   # Sync kickstart.nvim (every apply)
+└── .chezmoiscripts/                # Scripts (don't create target dirs)
+    ├── run_before_bootstrap_darwin.sh      # Install Homebrew (macOS)
+    ├── run_before_bootstrap_linux.sh       # Install apt prereqs + Linuxbrew
+    ├── run_onchange_install-packages.sh.tmpl   # Install brew/apt packages
+    ├── run_onchange_after_install-extras_linux.sh  # Linux extras (tag)
+    ├── run_once_defaults_darwin.sh         # macOS defaults (once)
+    ├── run_once_after_setup.sh.tmpl        # git-lfs, asimov (once)
+    └── run_after_update-kickstart.sh       # Sync kickstart (every apply)
 ```
 
 ## Naming Conventions
