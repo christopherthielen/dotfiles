@@ -16,6 +16,8 @@ export HOMEBREW_PREFIX="/opt/homebrew"
 export HOMEBREW_PREFIX="/usr/local"
 {{-   end }}
 eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
+# Use Homebrew's curl (newer, with HTTP/3 support)
+export PATH="$HOMEBREW_PREFIX/opt/curl/bin:$PATH"
 {{- else if eq .chezmoi.os "linux" }}
 if [ -d "/home/linuxbrew/.linuxbrew" ]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
