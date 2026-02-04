@@ -10,8 +10,12 @@ encryption = "age"
 {{-   $isWork = true -}}
 {{- end -}}
 
+{{- /* Auto-populate from cloud workstation environment */ -}}
+{{- if env "WORKSPACE_OWNER_EMAIL" -}}
+{{-   $isWork = true -}}
+{{-   $email = env "WORKSPACE_OWNER_EMAIL" -}}
+{{- else if stdinIsATTY -}}
 {{- /* Interactive prompts if stdin is available */ -}}
-{{- if stdinIsATTY -}}
 {{-   $isWork = promptBoolOnce . "isWork" "Is this a work machine" $isWork -}}
 {{-   if $isWork -}}
 {{-     $email = promptStringOnce . "email" "Work email address" "" -}}
