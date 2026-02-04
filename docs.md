@@ -1,19 +1,5 @@
 # Chezmoi Dotfiles Documentation
 
-## Chezmoi vs Oh-Your-Dotfiles
-
-**Oh-Your-Dotfiles** uses a convention-based approach:
-- `*.symlink` files get symlinked to `~/`
-- `install.sh` scripts run during setup
-- Topic folders organize by tool (git/, nvim/, zsh/)
-- Two repos (public/private) manually layered
-
-**Chezmoi** uses a declarative source-state approach:
-- Files in `~/.local/share/chezmoi/` are the "source of truth"
-- Chezmoi transforms and copies them to `~/` (no symlinks by default)
-- Single repo with templating handles public/private split
-- State is tracked - chezmoi knows what it manages
-
 ## Directory Structure
 
 ```
@@ -143,9 +129,7 @@ These values are saved to `~/.config/chezmoi/chezmoi.toml` and used for templati
 
 ## Package Management
 
-**Old approach:** `dotfiles_update` script manually runs brew commands.
-
-**Chezmoi approach:** `run_onchange_` scripts.
+Packages are defined in `.chezmoidata/packages.toml` and installed via `run_onchange_` scripts.
 
 ```bash
 # run_onchange_install-packages.sh.tmpl
@@ -301,15 +285,3 @@ The encrypted files are safe because only someone with your `key.txt` can decryp
 | Add encrypted file | `chezmoi add --encrypt ~/.secret` |
 | Update from git | `chezmoi update` (git pull + apply) |
 | Re-run install scripts | `chezmoi apply --force` |
-
-## Comparison Summary
-
-| Feature | Oh-Your-Dotfiles | Chezmoi |
-|---------|------------------|---------|
-| File management | Symlinks | Copy (with state tracking) |
-| Templating | None | Full Go templates |
-| OS conditionals | Separate repos/manual | Built-in |
-| Secrets | Separate private repo | Encrypted in same repo |
-| Package updates | Manual script | run_onchange_ scripts |
-| External repos | .gitrepo files | .chezmoiexternal.toml |
-| Bootstrapping | Clone + run install | Single `chezmoi init --apply` |
