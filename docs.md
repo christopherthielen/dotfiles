@@ -19,21 +19,21 @@
 ```
 ~/.local/share/chezmoi/           # Source state (this becomes your git repo)
 ├── .chezmoi.toml.tmpl            # Config template (prompts for isWork, email, etc.)
-├── .chezmoiexternal.toml         # External git repos (oh-my-zsh, kickstart.nvim)
+├── .chezmoidata/packages.toml    # Package lists for brew/apt
+├── .chezmoiexternal.toml         # External git repos (kickstart.nvim)
 ├── .chezmoiignore                # Files to skip based on OS/conditions
 ├── dot_zshrc.tmpl                # ~/.zshrc (dot_ prefix = dotfile)
 ├── dot_gitconfig.tmpl            # ~/.gitconfig
 ├── dot_config/                   # ~/.config/
+│   ├── starship.toml.tmpl        # Starship prompt config
 │   ├── zsh/
 │   │   ├── aliases.zsh.tmpl
-│   │   ├── tools.zsh.tmpl
-│   │   └── work.zsh.tmpl         # Only rendered if isWork=true
+│   │   ├── git.zsh               # Git helper functions
+│   │   └── tools.zsh.tmpl        # Tool integrations (fnm, fzf, mcfly, etc.)
 │   └── symlink_nvim.tmpl         # Symlink to ~/.kickstart.nvim
 ├── bin/
 │   └── executable_killport       # executable_ prefix = chmod +x
-├── private_Library/              # private_ prefix = mode 0600
-├── encrypted_dot_npmrc.age       # Encrypted file (contains npm token)
-├── run_once_install-packages.sh.tmpl      # Runs once per machine
+├── encrypted_*.age               # Encrypted files (work configs, secrets)
 ├── run_onchange_install-packages.sh.tmpl  # Runs when file content changes
 └── run_once_after_post-install.sh.tmpl    # Runs after other scripts
 ```
@@ -67,6 +67,13 @@ Templates use Go's `text/template` syntax with access to:
 **Example from `dot_gitconfig.tmpl`:**
 
 ```
+{{- if .isWork -}}
+##### BEGIN METATRON AUTOCONFIG
+[include]
+    path = ~/.gitconfig-proxy
+##### END METATRON AUTOCONFIG
+{{ end }}
+
 [user]
     name = {{ .name }}
     email = {{ .email }}
@@ -77,7 +84,6 @@ Templates use Go's `text/template` syntax with access to:
 {{- end }}
 
 {{- if .isWork }}
-# Work-specific git config (included from encrypted file)
 [include]
     path = ~/.gitconfig_work
 {{- end }}
@@ -91,7 +97,8 @@ Three ways to handle OS-specific config:
 
 ```
 {{- if eq .chezmoi.os "darwin" }}
-alias top="top -o cpu"
+[credential]
+    helper = osxkeychain
 {{- end }}
 ```
 
@@ -100,6 +107,10 @@ alias top="top -o cpu"
 ```
 {{- if ne .chezmoi.os "darwin" }}
 Library/**
+{{- end }}
+
+{{- if not .isWork }}
+.config/zsh/work.zsh
 {{- end }}
 ```
 
@@ -165,18 +176,35 @@ done
 The `.chezmoiexternal.toml` manages git repos and archives:
 
 ```toml
-[".oh-my-zsh"]
-    type = "git-repo"
-    url = "https://github.com/ohmyzsh/ohmyzsh.git"
-    refreshPeriod = "168h"   # Re-pull weekly
-
 [".kickstart.nvim"]
     type = "git-repo"
     url = "https://github.com/christopherthielen/kickstart.nvim.git"
-    refreshPeriod = "168h"
+    refreshPeriod = "168h"   # Re-pull weekly
 ```
 
 These are cloned/updated automatically on `chezmoi apply`.
+
+## Zsh Plugin Management
+
+Zsh plugins are managed by **zinit** (not oh-my-zsh). Zinit auto-installs on first shell launch.
+
+**Key features:**
+- Turbo mode: plugins load asynchronously for fast startup
+- OMZ compatibility: loads OMZ libraries and plugins as snippets
+- Auto-updates: `zinit update` updates all plugins
+
+**Plugins loaded:**
+- OMZ libraries: completion, directories, history, key-bindings
+- OMZ plugins: git, docker, sudo, node, npm, yarn
+- Third-party: zsh-vi-mode, zsh-autosuggestions, zsh-syntax-highlighting
+
+**Tool integrations (in `tools.zsh.tmpl`):**
+- fnm (Node version manager)
+- fzf (fuzzy finder - Ctrl-T for files, Alt-C for cd)
+- mcfly (history search - Ctrl-R)
+- starship (prompt)
+- autojump (directory jumping - `j <dir>`)
+- tag-ag (jump-to-line aliases for ag)
 
 ## Secrets Management
 
@@ -186,8 +214,15 @@ This setup uses `age` encryption.
 
 ```
 ~/.config/chezmoi/key.txt          # Your private key (NEVER commit this)
-~/.local/share/chezmoi/encrypted_dot_npmrc.age  # Encrypted file (safe to commit)
+~/.local/share/chezmoi/encrypted_*.age  # Encrypted files (safe to commit)
 ```
+
+**Encrypted files in this repo:**
+- `encrypted_private_dot_npmrc.age` - npm auth tokens
+- `encrypted_dot_gitconfig_work.tmpl.age` - Work git config
+- `encrypted_dot_config/zsh/work.zsh.tmpl.age` - Work shell config
+- `encrypted_run_once_install-work-tools.sh.tmpl.age` - Work tools installer
+- `bin/encrypted_executable_*.age` - Work utility scripts
 
 **How it works:**
 
