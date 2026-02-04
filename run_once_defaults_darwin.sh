@@ -1,4 +1,3 @@
-{{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 # Sensible defaults for macOS
 
@@ -17,4 +16,3 @@ defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
 defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
 
 echo "macOS defaults configured!"
-{{- end }}

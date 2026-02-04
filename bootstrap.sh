@@ -27,7 +27,7 @@ echo ""
 # Age key for secrets decryption
 AGE_KEY=""
 if [[ ! -f "$HOME/.config/chezmoi/key.txt" ]]; then
-    echo "Your dotfiles contain encrypted secrets (npm tokens, etc.)"
+    echo "Your dotfiles contain encrypted secrets."
     echo "Paste your age key from Bitwarden (3 lines), then press Ctrl+D:"
     echo ""
     if [[ -t 0 ]]; then

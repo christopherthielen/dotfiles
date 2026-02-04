@@ -1,4 +1,3 @@
-{{- if eq .chezmoi.os "linux" -}}
 #!/bin/bash
 # Install Linux tools not available via apt or Linuxbrew
 # Most tools now come from Linuxbrew (with bottles) - see packages.toml
@@ -15,4 +14,3 @@ if command -v go &>/dev/null && ! command -v tag &>/dev/null; then
 fi
 
 echo "Linux extras complete!"
-{{- end }}
