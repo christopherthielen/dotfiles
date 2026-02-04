@@ -5,11 +5,11 @@
 # It decrypts the AGE key via metatron and delegates to the main chezmoi bootstrap.
 #
 # Prerequisites:
-# 1. Create a Gandalf policy at go/gandalf (e.g., "CTHIELEN_DOTFILES")
+# 1. Gandalf policy: cthielen-dotfiles (ID: 3367221)
 # 2. Encrypt your AGE key: 
 #    mkdir -p root/metatron/decrypted
 #    cp ~/.config/chezmoi/key.txt root/metatron/decrypted/chezmoi-age-key
-#    metatron encrypt -p CTHIELEN_DOTFILES chezmoi-age-key
+#    metatron encrypt -p cthielen-dotfiles chezmoi-age-key
 # 3. Commit root/metatron/encrypted/chezmoi-age-key.mtb to this repo
 # 4. Add root/metatron/decrypted/ to .gitignore
 
