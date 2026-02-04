@@ -63,8 +63,3 @@ if (( $+commands[tag] )); then
     tag() { command tag "$@"; source "${TAG_ALIAS_FILE:-/tmp/tag_aliases}" 2>/dev/null }
     alias ag=tag
 fi
-
-# iTerm2 shell integration
-{{- if eq .chezmoi.os "darwin" }}
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-{{- end }}

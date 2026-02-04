@@ -28,4 +28,3 @@ Library/**
 # Files managed by other tools (auto-generated)
 .gitconfig-proxy
 .metatron/**
-.iterm2_shell_integration.zsh

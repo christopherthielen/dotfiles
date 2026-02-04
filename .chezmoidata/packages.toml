@@ -80,7 +80,6 @@ formulae = [
 casks = [
     # Terminals
     "ghostty",
-    "iterm2",
 
     # Development
     "docker",
