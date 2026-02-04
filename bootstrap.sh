@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
-# INSTALL:
+# INSTALL (requires TTY for age key prompt):
 #
-# curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh | bash
-#
-# Or to review first:
-# curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash ./bootstrap.sh
+# curl -fsSL https://raw.githubusercontent.com/christopherthielen/dotfiles/main/bootstrap.sh -o bootstrap.sh && bash bootstrap.sh
 
 set -e
 
