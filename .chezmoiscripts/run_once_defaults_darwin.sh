@@ -1,6 +1,9 @@
 #!/bin/bash
 # Sensible defaults for macOS
 
+# Only run on macOS
+[[ "$(uname -s)" != "Darwin" ]] && exit 0
+
 # Show the ~/Library folder
 chflags nohidden ~/Library
 

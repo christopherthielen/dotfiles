@@ -1,9 +1,17 @@
 #!/bin/bash
 # Install Linux tools not available via apt or Linuxbrew
 # Most tools now come from Linuxbrew (with bottles) - see packages.toml
-# hash:v3 - removed yubikey (not needed on remote Linux workstations)
+# hash:v4 - added OS guard and brew PATH
 
 set -e
+
+# Only run on Linux
+[[ "$(uname -s)" != "Linux" ]] && exit 0
+
+# Ensure Homebrew is in PATH
+if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 echo "Installing Linux extras..."
 

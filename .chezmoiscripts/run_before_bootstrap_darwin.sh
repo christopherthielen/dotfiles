@@ -3,6 +3,9 @@
 
 set -e
 
+# Only run on macOS
+[[ "$(uname -s)" != "Darwin" ]] && exit 0
+
 if [[ "$(uname -m)" == "arm64" ]]; then
     HOMEBREW_PREFIX="/opt/homebrew"
 else

@@ -3,6 +3,9 @@
 
 set -e
 
+# Only run on Linux
+[[ "$(uname -s)" != "Linux" ]] && exit 0
+
 HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
 
 # Skip if Homebrew already installed
