@@ -3,39 +3,50 @@
 ## Directory Structure
 
 ```
-~/.local/share/chezmoi/           # Source state (this becomes your git repo)
-├── .chezmoi.toml.tmpl            # Config template (prompts for isWork, email, etc.)
-├── .chezmoidata/packages.toml    # Package lists for brew/apt
-├── .chezmoiexternal.toml         # External git repos (kickstart.nvim)
-├── .chezmoiignore                # Files to skip based on OS/conditions
-├── dot_zshrc.tmpl                # ~/.zshrc (dot_ prefix = dotfile)
-├── dot_gitconfig.tmpl            # ~/.gitconfig
-├── dot_config/                   # ~/.config/
-│   ├── starship.toml.tmpl        # Starship prompt config
-│   ├── zsh/
-│   │   ├── aliases.zsh.tmpl
-│   │   ├── git.zsh               # Git helper functions
-│   │   └── tools.zsh.tmpl        # Tool integrations (fnm, fzf, mcfly, etc.)
-│   └── symlink_nvim.tmpl         # Symlink to ~/.kickstart.nvim
+~/.local/share/chezmoi/
+├── .chezmoi.toml.tmpl              # Config template (prompts for isWork, email, etc.)
+├── .chezmoidata/packages.toml      # Package lists for brew/apt
+├── .chezmoiexternal.toml           # External git repos (kickstart.nvim)
+├── .chezmoiignore                  # Files to skip based on OS/conditions
+├── bootstrap.sh                    # Initial bootstrap script
+├── dot_zshrc.tmpl                  # ~/.zshrc
+├── dot_gitconfig.tmpl              # ~/.gitconfig
+├── dot_gitignore_global            # ~/.gitignore_global
+├── dot_nvimrc                      # ~/.nvimrc (sources .vimrc)
+├── dot_vimrc                       # ~/.vimrc (basic vim settings)
+├── dot_config/
+│   ├── starship.toml.tmpl          # Starship prompt config
+│   ├── symlink_nvim.tmpl           # Symlink ~/.config/nvim → ~/.kickstart.nvim
+│   └── zsh/
+│       ├── aliases.zsh.tmpl        # Shell aliases
+│       ├── git.zsh                 # Git helper functions
+│       └── tools.zsh.tmpl          # Tool integrations (fnm, fzf, mcfly, etc.)
 ├── bin/
-│   └── executable_killport       # executable_ prefix = chmod +x
-├── encrypted_*.age               # Encrypted files (work configs, secrets)
-├── run_onchange_install-packages.sh.tmpl  # Runs when file content changes
-└── run_once_after_post-install.sh.tmpl    # Runs after other scripts
+│   └── executable_killport         # Kill process on port
+├── encrypted_*.age                 # Encrypted work configs and secrets
+├── run_before_bootstrap_darwin.sh  # Install Homebrew (macOS)
+├── run_before_bootstrap_linux.sh   # Install apt prereqs + Linuxbrew
+├── run_onchange_install-packages.sh.tmpl   # Install brew/apt packages
+├── run_onchange_after_install-extras_linux.sh  # Linux-specific extras (tag)
+├── run_once_defaults_darwin.sh     # macOS defaults (key repeat, etc.)
+└── run_once_after_post-install.sh.tmpl     # git-lfs, nvim plugins
 ```
 
 ## Naming Conventions
 
-| Prefix | Meaning |
-|--------|---------|
+| Prefix/Suffix | Meaning |
+|---------------|---------|
 | `dot_` | Becomes `.` (dot_zshrc → .zshrc) |
 | `executable_` | chmod +x |
 | `private_` | chmod 600 |
 | `symlink_` | Creates a symlink |
 | `encrypted_` | Decrypted on apply (needs age key) |
+| `run_before_` | Script runs before files are copied |
 | `run_once_` | Script runs once per machine |
 | `run_onchange_` | Script runs when its content changes |
 | `run_once_after_` | Runs after other run_once scripts |
+| `_darwin` | Only applies on macOS |
+| `_linux` | Only applies on Linux |
 | `.tmpl` | Template - processed with Go text/template |
 
 ## Templating
@@ -100,11 +111,12 @@ Library/**
 {{- end }}
 ```
 
-**3. Separate files with OS suffix:** (not used in this setup, but available)
+**3. Separate files with OS suffix:**
 
 ```
-dot_zshrc.tmpl           # All platforms
-dot_zshrc_darwin.tmpl    # macOS only
+run_before_bootstrap_darwin.sh   # macOS only
+run_before_bootstrap_linux.sh    # Linux only
+run_once_defaults_darwin.sh      # macOS only
 ```
 
 ## Bootstrapping a New Machine
@@ -131,29 +143,34 @@ chezmoi apply     # Apply changes
 
 ## Package Management
 
-Packages are defined in `.chezmoidata/packages.toml` and installed via `run_onchange_` scripts.
+Packages are defined in `.chezmoidata/packages.toml`:
 
-```bash
-# run_onchange_install-packages.sh.tmpl
-# Chezmoi runs this when the CONTENT of this file changes
+```toml
+[brew.common]
+formulae = ["autojump", "bat", "fzf", "neovim", ...]
 
-FORMULAE=(
-    autojump
-    bat
-    # ... adding a package here triggers re-run
-)
+[darwin.brew]
+formulae = ["mas", "coreutils", ...]
+casks = ["ghostty", "docker", "raycast", ...]
 
-for formula in "${FORMULAE[@]}"; do
-    brew install "$formula" 2>/dev/null || true
-done
+[darwin.mas]
+apps = [{ id = "1352778147", name = "Bitwarden" }, ...]
+
+[linux.apt]
+packages = ["build-essential", "zsh", ...]
+
+[linux.brew]
+formulae = ["fx", "go", ...]
 ```
 
+The `run_onchange_install-packages.sh.tmpl` script reads from this data and installs packages. Adding a package to the toml file triggers a re-run on next `chezmoi apply`.
+
 **Key behaviors:**
+- `run_before_` - Runs before files are copied (used for Homebrew install)
 - `run_once_` - Runs once ever (tracked by filename hash)
 - `run_onchange_` - Runs when file content changes (add a package → re-runs)
-- Scripts are idempotent (check if already installed before installing)
 
-**To update packages:** Edit the package list in the source, then `chezmoi apply`.
+**To update packages:** Edit `.chezmoidata/packages.toml`, then `chezmoi apply`.
 
 **For ad-hoc updates:** Just run `brew upgrade` directly - chezmoi doesn't fight you.
 
@@ -229,20 +246,11 @@ This setup uses `age` encryption.
 
 3. **On `chezmoi apply`**, it decrypts using your key and writes `~/.npmrc`
 
-4. **On a new machine**, you need to:
-
-   ```bash
-   # Copy your age key (securely - not via git!)
-   mkdir -p ~/.config/chezmoi
-   # Paste your key into ~/.config/chezmoi/key.txt
-   
-   # Then chezmoi can decrypt
-   chezmoi apply
-   ```
+4. **On a new machine**, `bootstrap.sh` prompts for your age key automatically.
 
 **Your age key** (in `~/.config/chezmoi/key.txt`):
 - Generated once, reused on all your machines
-- Transfer it securely (1Password, airdrop, etc.)
+- Store it securely (Bitwarden, 1Password, etc.)
 - **Never commit it to git**
 
 ## Publishing to GitHub
