@@ -222,6 +222,25 @@ Create `symlink_<name>.tmpl` with target path as contents:
 
 Creates: `~/.dotfiles/personal` → `~/.local/share/chezmoi`
 
+## Git Multiple Identities
+
+Use `includeIf` for directory-based identity switching:
+
+```gitconfig
+# ~/.gitconfig_work (in work repo, not public)
+[includeIf "gitdir:~/netflix/"]
+    path = ~/.gitconfig_work_identity
+
+# ~/.gitconfig_work_identity (in work repo)
+[user]
+    email = work@company.com
+```
+
+**Key points:**
+- `includeIf` only supports `path` to another file (can't inline sections)
+- Keep sensitive paths and emails in work repo to avoid leakage to public repo
+- The main `.gitconfig` just includes `.gitconfig_work` via `{{- if .isWork }}` conditional
+
 ## References
 
 ### Official Documentation
