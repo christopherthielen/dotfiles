@@ -62,7 +62,7 @@ nvim-update() {
         echo "\nUpdating kickstart.nvim..."
         git -C ~/.kickstart.nvim fetch upstream 2>/dev/null || \
             git -C ~/.kickstart.nvim remote add upstream https://github.com/nvim-lua/kickstart.nvim.git
-        git -C ~/.kickstart.nvim pull --rebase upstream main
+        git -C ~/.kickstart.nvim pull --rebase upstream master
     fi
 
     echo "\nUpdating plugins..."
