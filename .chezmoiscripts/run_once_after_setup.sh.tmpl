@@ -34,6 +34,9 @@ fi
 if command -v nvim &>/dev/null; then
     echo "Initializing neovim plugins..."
     nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+    # Set marker so nvim-update reminder doesn't fire immediately
+    mkdir -p ~/.local/state
+    touch ~/.local/state/nvim-updated
 fi
 
 echo "One-time setup complete!"
