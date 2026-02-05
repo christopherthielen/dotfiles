@@ -2,6 +2,8 @@
 README.md
 LICENSE
 bootstrap.sh
+CLAUDE.md
+skills/**
 
 # OS-specific ignores
 {{- if ne .chezmoi.os "darwin" }}
