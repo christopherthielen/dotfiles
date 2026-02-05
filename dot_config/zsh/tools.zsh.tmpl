@@ -49,3 +49,34 @@ if (( $+commands[tag] )); then
     tag() { command tag "$@"; source "${TAG_ALIAS_FILE:-/tmp/tag_aliases}" 2>/dev/null }
     alias ag=tag
 fi
+
+# Neovim update function and quarterly reminder
+nvim-update() {
+    local marker=~/.local/state/nvim-updated
+    mkdir -p ~/.local/state
+
+    echo "Updating neovim..."
+    brew upgrade neovim || brew install neovim
+
+    if [[ -d ~/.kickstart.nvim/.git ]]; then
+        echo "\nUpdating kickstart.nvim..."
+        git -C ~/.kickstart.nvim fetch upstream 2>/dev/null || \
+            git -C ~/.kickstart.nvim remote add upstream https://github.com/nvim-lua/kickstart.nvim.git
+        git -C ~/.kickstart.nvim pull --rebase upstream main
+    fi
+
+    echo "\nUpdating plugins..."
+    nvim --headless "+Lazy! sync" +qa
+
+    touch "$marker"
+    echo "\nDone! Next reminder in 90 days."
+}
+
+_nvim_update_check() {
+    local marker=~/.local/state/nvim-updated
+    local days=90
+    if [[ ! -f $marker ]] || [[ -n $(find "$marker" -mtime +$days 2>/dev/null) ]]; then
+        echo "[nvim] Time to update (>$days days). Run: nvim-update"
+    fi
+}
+_nvim_update_check
