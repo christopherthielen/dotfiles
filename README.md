@@ -54,8 +54,8 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
     ├── run_once_before_bootstrap_linux.sh      # Install apt prereqs + Linuxbrew
     ├── run_onchange_after_install-packages.sh.tmpl  # Install brew/apt packages
     ├── run_onchange_after_install-extras_linux.sh   # Linux extras (tag)
-    ├── run_once_after_defaults_darwin.sh       # macOS defaults (once)
-    └── run_once_after_setup.sh.tmpl            # git-lfs, asimov (once)
+    ├── run_once_after_setup_darwin.sh          # macOS defaults + asimov (once)
+    └── run_once_after_setup.sh.tmpl            # git-lfs, nvim plugins (once)
 ```
 
 ## Naming Conventions
@@ -198,8 +198,8 @@ These run exactly once per machine (tracked by chezmoi state):
 
 | Script | OS | Purpose |
 |--------|-----|---------|
-| `run_once_after_defaults_darwin.sh` | macOS | Set macOS defaults (key repeat, show ~/Library, etc.) |
-| `run_once_after_setup.sh.tmpl` | All | Configure git-lfs, start asimov (macOS), initialize neovim plugins |
+| `run_once_after_setup_darwin.sh` | macOS | macOS defaults (key repeat, etc.) + start asimov |
+| `run_once_after_setup.sh.tmpl` | All | Configure git-lfs, initialize neovim plugins |
 
 #### 7. First Shell Launch (`zsh`)
 When you start zsh for the first time:
@@ -218,7 +218,7 @@ bootstrap.sh
             ├── [apply all dotfiles]                  → templates, symlinks, externals
             ├── run_onchange_after_install-packages.sh.tmpl  → brew/apt packages
             ├── run_onchange_after_install-extras_linux.sh   → Linux extras
-            ├── run_once_after_defaults_darwin.sh     → macOS defaults
+            ├── run_once_after_setup_darwin.sh        → macOS defaults, asimov
             └── run_once_after_setup.sh.tmpl          → git-lfs, nvim plugins
 zsh (first launch)
     └── zinit, fnm, mcfly initialize

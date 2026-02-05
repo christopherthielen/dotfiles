@@ -16,14 +16,6 @@ if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 fi
 {{- end }}
 
-{{- if eq .chezmoi.os "darwin" }}
-# asimov excludes node_modules, etc from Time Machine
-if command -v brew &>/dev/null && brew services list | grep -q "^asimov *stopped"; then
-    echo "Starting asimov service..."
-    sudo brew services start asimov
-fi
-{{- end }}
-
 # Configure git-lfs
 if command -v git-lfs &>/dev/null; then
     echo "Configuring git-lfs..."
