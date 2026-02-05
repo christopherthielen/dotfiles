@@ -7,6 +7,9 @@
 # Do not remove the below line. The metatron CLI uses it to update this file.
 ##### END METATRON AUTOCONFIG
 
+# Include work-specific git config (managed by ~/.dotfiles/work)
+    path = ~/.gitconfig_work
+
 {{ end }}
 [user]
     name = {{ .name }}
@@ -134,10 +137,3 @@
     # Prunes Local Branches that track a remote, where the remote branch has been deleted
     plb = !git remote prune origin && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
     plb3 = !git remote prune upstream && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
-
-{{- if .isWork }}
-
-# Include work-specific git config (managed by ~/.dotfiles/work)
-[include]
-    path = ~/.gitconfig_work
-{{- end }}
