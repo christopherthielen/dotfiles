@@ -63,7 +63,6 @@ formulae = [
     "jenv",             # Java version manager
     "kotlin",           # Kotlin language
     "luarocks",         # Lua package manager
-    "node",             # Node.js
     "pstree",           # Process tree
     "ruby",             # Ruby language
     "rust",             # Rust language
