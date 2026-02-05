@@ -20,6 +20,8 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 | Edit a file | `chezmoi edit ~/.zshrc` |
 | Add a new file | `chezmoi add ~/.newfile` |
 
+**Tip:** `dotfiles` is aliased to `chezmoi`.
+
 ---
 
 ## Directory Structure
@@ -43,17 +45,17 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 │       ├── aliases.zsh.tmpl        # Shell aliases
 │       ├── git.zsh                 # Git helper functions
 │       └── tools.zsh.tmpl          # Tool integrations (fnm, fzf, mcfly, etc.)
+├── dot_dotfiles/
+│   └── symlink_personal.tmpl       # Symlink ~/.dotfiles/personal → this repo
 ├── bin/
 │   └── executable_killport         # Kill process on port
-├── encrypted_*.age                 # Encrypted work configs and secrets
-└── .chezmoiscripts/                # Scripts (don't create target dirs)
-    ├── run_before_bootstrap_darwin.sh      # Install Homebrew (macOS)
-    ├── run_before_bootstrap_linux.sh       # Install apt prereqs + Linuxbrew
-    ├── run_onchange_install-packages.sh.tmpl   # Install brew/apt packages
-    ├── run_onchange_after_install-extras_linux.sh  # Linux extras (tag)
-    ├── run_once_defaults_darwin.sh         # macOS defaults (once)
-    ├── run_once_after_setup.sh.tmpl        # git-lfs, asimov (once)
-    └── run_after_update-kickstart.sh       # Sync kickstart (every apply)
+└── .chezmoiscripts/
+    ├── run_once_before_bootstrap_darwin.sh     # Install Homebrew (macOS)
+    ├── run_once_before_bootstrap_linux.sh      # Install apt prereqs + Linuxbrew
+    ├── run_onchange_after_install-packages.sh.tmpl  # Install brew/apt packages
+    ├── run_onchange_after_install-extras_linux.sh   # Linux extras (tag)
+    ├── run_once_after_defaults_darwin.sh       # macOS defaults (once)
+    └── run_once_after_setup.sh.tmpl            # git-lfs, asimov (once)
 ```
 
 ## Naming Conventions
@@ -168,13 +170,13 @@ The bootstrap process follows this sequence:
   - **Full name**
 - Saves answers to `~/.config/chezmoi/chezmoi.toml`
 
-#### 3. `run_before_` Scripts (Before Files Are Copied)
+#### 3. `run_once_before_` Scripts (Before Files Are Copied)
 Scripts run in alphabetical order, filtered by OS guards:
 
 | Script | OS | Purpose |
 |--------|-----|---------|
-| `run_before_bootstrap_darwin.sh` | macOS | Install Homebrew to `/opt/homebrew` or `/usr/local` |
-| `run_before_bootstrap_linux.sh` | Linux | Install apt prerequisites + Linuxbrew to `/home/linuxbrew/.linuxbrew` |
+| `run_once_before_bootstrap_darwin.sh` | macOS | Install Homebrew to `/opt/homebrew` or `/usr/local` |
+| `run_once_before_bootstrap_linux.sh` | Linux | Install apt prerequisites + Linuxbrew to `/home/linuxbrew/.linuxbrew` |
 
 #### 4. File Application
 Chezmoi applies all dotfiles:
@@ -188,23 +190,18 @@ These run when the script content (or referenced data) changes:
 
 | Script | Purpose |
 |--------|---------|
-| `run_onchange_install-packages.sh.tmpl` | Install brew formulae, casks, apt packages from `packages.toml` |
+| `run_onchange_after_install-packages.sh.tmpl` | Install brew formulae, casks, apt packages from `packages.toml` |
 | `run_onchange_after_install-extras_linux.sh` | Install Linux tools not in package managers (e.g., `tag` via `go install`) |
 
-#### 6. `run_once_` Scripts (First Time Only)
+#### 6. `run_once_after_` Scripts (First Time Only)
 These run exactly once per machine (tracked by chezmoi state):
 
 | Script | OS | Purpose |
 |--------|-----|---------|
-| `run_once_defaults_darwin.sh` | macOS | Set macOS defaults (key repeat, show ~/Library, etc.) |
+| `run_once_after_defaults_darwin.sh` | macOS | Set macOS defaults (key repeat, show ~/Library, etc.) |
 | `run_once_after_setup.sh.tmpl` | All | Configure git-lfs, start asimov (macOS), initialize neovim plugins |
 
-#### 7. `run_after_` Scripts (Every Apply)
-| Script | Purpose |
-|--------|---------|
-| `run_after_update-kickstart.sh` | Sync kickstart.nvim with upstream changes |
-
-#### 8. First Shell Launch (`zsh`)
+#### 7. First Shell Launch (`zsh`)
 When you start zsh for the first time:
 - **zinit** auto-installs (plugin manager)
 - OMZ snippets and plugins download
@@ -216,14 +213,13 @@ When you start zsh for the first time:
 ```
 bootstrap.sh
     └── chezmoi init --apply
-            ├── .chezmoi.toml.tmpl          → prompts for config
-            ├── run_before_bootstrap_*.sh   → install Homebrew
-            ├── [apply all dotfiles]        → templates, symlinks, externals
-            ├── run_onchange_install-packages.sh.tmpl  → brew/apt packages
-            ├── run_onchange_after_install-extras_linux.sh  → Linux extras
-            ├── run_once_defaults_darwin.sh → macOS defaults
-            ├── run_once_after_setup.sh.tmpl → git-lfs, nvim plugins
-            └── run_after_update-kickstart.sh → sync kickstart.nvim
+            ├── .chezmoi.toml.tmpl                    → prompts for config
+            ├── run_once_before_bootstrap_*.sh        → install Homebrew
+            ├── [apply all dotfiles]                  → templates, symlinks, externals
+            ├── run_onchange_after_install-packages.sh.tmpl  → brew/apt packages
+            ├── run_onchange_after_install-extras_linux.sh   → Linux extras
+            ├── run_once_after_defaults_darwin.sh     → macOS defaults
+            └── run_once_after_setup.sh.tmpl          → git-lfs, nvim plugins
 zsh (first launch)
     └── zinit, fnm, mcfly initialize
 ```
@@ -307,7 +303,7 @@ Zsh plugins are managed by **zinit** (not oh-my-zsh). Zinit auto-installs on fir
 
 ## Secrets Management
 
-This setup uses `age` encryption.
+This setup uses `age` encryption for secrets that must remain private even in a public repo.
 
 **File locations:**
 
@@ -316,12 +312,7 @@ This setup uses `age` encryption.
 ~/.local/share/chezmoi/encrypted_*.age  # Encrypted files (safe to commit)
 ```
 
-**Encrypted files in this repo:**
-- `encrypted_private_dot_npmrc.age` - npm auth tokens
-- `encrypted_dot_gitconfig_work.tmpl.age` - Work git config
-- `encrypted_dot_config/zsh/work.zsh.tmpl.age` - Work shell config
-- `encrypted_run_once_install-work-tools.sh.tmpl.age` - Work tools installer
-- `bin/encrypted_executable_*.age` - Work utility scripts
+**Note:** Work-specific configuration has been moved to a separate internal repo. See [Work Configuration](#work-configuration) below.
 
 **How it works:**
 
@@ -348,6 +339,23 @@ This setup uses `age` encryption.
 - Generated once, reused on all your machines
 - Store it securely (Bitwarden, 1Password, etc.)
 - **Never commit it to git**
+
+## Work Configuration
+
+Work-specific dotfiles are managed in a separate internal repository that layers on top of this one. This keeps work-internal references (DNS names, tool configurations) out of the public repo while avoiding unnecessary encryption overhead.
+
+**Architecture:**
+- Personal dotfiles work standalone without any work config
+- Work config is additive (supplements, never replaces)
+- Conditional entry points in personal files include/source work files:
+  - `.gitconfig` has `[include] path = ~/.gitconfig_work`
+  - `.zshrc` sources `~/.config/zsh/*.zsh` (includes `work.zsh` if present)
+
+**Symlinks (created by chezmoi):**
+- `~/.dotfiles/personal` → `~/.local/share/chezmoi`
+- `~/.dotfiles/work` → work dotfiles repo (if present)
+
+On work machines, a `chezmoi` wrapper function applies both sources automatically.
 
 ## Publishing to GitHub
 
