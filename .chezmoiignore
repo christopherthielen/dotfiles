@@ -4,6 +4,7 @@ LICENSE
 bootstrap.sh
 CLAUDE.md
 skills/**
+packages.toml
 
 # OS-specific ignores
 {{- if ne .chezmoi.os "darwin" }}
