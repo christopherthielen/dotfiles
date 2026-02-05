@@ -91,6 +91,11 @@ chezmoi-work diff
    - Work repo sets `isWork = true` in its own config
    - Personal repo detects `isWork` via hostname/metatron
 
+5. **Symlink loop with `.chezmoi.sourceDir`**
+   - If wrapper uses `--source ~/.dotfiles/work` (a symlink), `.chezmoi.sourceDir` becomes the symlink path
+   - `symlink_work.tmpl` would then create `~/.dotfiles/work` → `~/.dotfiles/work` (loop!)
+   - **Fix:** Use `{{ .chezmoi.sourceDir }}` in the wrapper template so the real path is baked in at render time
+
 ## Encryption
 
 ### AGE Encryption Setup
