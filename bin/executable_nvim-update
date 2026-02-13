@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Update neovim, configs, and plugins
+set -e
+
+echo "Updating neovim..."
+brew upgrade neovim 2>/dev/null || brew install neovim
+
+if [[ -d ~/.config/nvim/.git ]]; then
+    echo ""
+    echo "Updating AstroNvim template..."
+    git -C ~/.config/nvim fetch upstream 2>/dev/null || \
+        git -C ~/.config/nvim remote add upstream https://github.com/AstroNvim/template.git
+    git -C ~/.config/nvim pull --rebase upstream main
+fi
+
+if [[ -d ~/.kickstart.nvim/.git ]]; then
+    echo ""
+    echo "Updating kickstart.nvim..."
+    git -C ~/.kickstart.nvim fetch upstream 2>/dev/null || \
+        git -C ~/.kickstart.nvim remote add upstream https://github.com/nvim-lua/kickstart.nvim.git
+    git -C ~/.kickstart.nvim pull --rebase upstream master
+fi
+
+echo ""
+echo "Updating AstroNvim plugins..."
+nvim --headless "+Lazy! sync" +qa
+
+if [[ -d ~/.config/nvim-kickstart ]]; then
+    echo ""
+    echo "Updating kickstart plugins..."
+    NVIM_APPNAME=nvim-kickstart nvim --headless "+Lazy! sync" +qa
+fi
+
+mkdir -p ~/.local/state
+touch ~/.local/state/nvim-updated
+echo ""
+echo "Done! Next reminder in 90 days."

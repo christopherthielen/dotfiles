@@ -50,40 +50,7 @@ if (( $+commands[tag] )); then
     alias ag=tag
 fi
 
-# Neovim update function and quarterly reminder
-nvim-update() {
-    local marker=~/.local/state/nvim-updated
-    mkdir -p ~/.local/state
-
-    echo "Updating neovim..."
-    brew upgrade neovim || brew install neovim
-
-    if [[ -d ~/.kickstart.nvim/.git ]]; then
-        echo "\nUpdating kickstart.nvim..."
-        git -C ~/.kickstart.nvim fetch upstream 2>/dev/null || \
-            git -C ~/.kickstart.nvim remote add upstream https://github.com/nvim-lua/kickstart.nvim.git
-        git -C ~/.kickstart.nvim pull --rebase upstream master
-    fi
-
-    if [[ -d ~/.config/nvim/.git ]]; then
-        echo "\nUpdating AstroNvim template..."
-        git -C ~/.config/nvim fetch upstream 2>/dev/null || \
-            git -C ~/.config/nvim remote add upstream https://github.com/AstroNvim/template.git
-        git -C ~/.config/nvim pull --rebase upstream main
-    fi
-
-    echo "\nUpdating AstroNvim plugins..."
-    nvim --headless "+Lazy! sync" +qa
-
-    if [[ -d ~/.config/nvim-kickstart ]]; then
-        echo "\nUpdating kickstart plugins..."
-        NVIM_APPNAME=nvim-kickstart nvim --headless "+Lazy! sync" +qa
-    fi
-
-    touch "$marker"
-    echo "\nDone! Next reminder in 90 days."
-}
-
+# Neovim quarterly update reminder (nvim-update script is in ~/bin)
 _nvim_update_check() {
     local marker=~/.local/state/nvim-updated
     local days=90
