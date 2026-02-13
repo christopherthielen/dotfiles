@@ -2,8 +2,10 @@
 # Update neovim, configs, and plugins
 set -e
 
-echo "Updating neovim..."
-brew upgrade neovim 2>/dev/null || brew install neovim
+if command -v brew &>/dev/null; then
+    echo "Updating neovim via brew..."
+    brew upgrade neovim 2>/dev/null || brew install neovim
+fi
 
 if [[ -d ~/.config/nvim/.git ]]; then
     echo ""
