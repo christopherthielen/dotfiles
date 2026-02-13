@@ -76,6 +76,10 @@ function zvm_after_init() {
     bindkey -M vicmd '^[[91;5u' undefined-key  # no-op in normal mode
 }
 
+# Claude Code CLI completions
+zinit wait lucid for \
+    wbingli/zsh-claudecode-completion
+
 # Syntax highlighting and autosuggestions (load last, deferred)
 zinit wait lucid for \
     atload"_zsh_autosuggest_start" \
