@@ -22,10 +22,22 @@ if command -v git-lfs &>/dev/null; then
     git lfs install 2>/dev/null || true
 fi
 
-# Initialize neovim plugins
+# Initialize neovim
 if command -v nvim &>/dev/null; then
-    echo "Initializing neovim plugins..."
+    # Add AstroNvim upstream remote for template updates
+    if [[ -d ~/.config/nvim/.git ]]; then
+        git -C ~/.config/nvim fetch upstream 2>/dev/null || \
+            git -C ~/.config/nvim remote add upstream https://github.com/AstroNvim/template.git
+    fi
+
+    echo "Initializing AstroNvim plugins..."
     nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+
+    if [[ -d ~/.config/nvim-kickstart ]]; then
+        echo "Initializing kickstart plugins..."
+        NVIM_APPNAME=nvim-kickstart nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+    fi
+
     # Set marker so nvim-update reminder doesn't fire immediately
     mkdir -p ~/.local/state
     touch ~/.local/state/nvim-updated
