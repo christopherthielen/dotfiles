@@ -65,8 +65,18 @@ nvim-update() {
         git -C ~/.kickstart.nvim pull --rebase upstream master
     fi
 
-    echo "\nUpdating plugins..."
+    if [[ -d ~/.config/nvim/.git ]]; then
+        echo "\nUpdating AstroNvim template..."
+        git -C ~/.config/nvim pull --rebase upstream main
+    fi
+
+    echo "\nUpdating AstroNvim plugins..."
     nvim --headless "+Lazy! sync" +qa
+
+    if [[ -d ~/.config/nvim-kickstart ]]; then
+        echo "\nUpdating kickstart plugins..."
+        NVIM_APPNAME=nvim-kickstart nvim --headless "+Lazy! sync" +qa
+    fi
 
     touch "$marker"
     echo "\nDone! Next reminder in 90 days."
