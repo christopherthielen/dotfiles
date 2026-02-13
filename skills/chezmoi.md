@@ -156,7 +156,7 @@ chezmoi verify
 **Problem:** `run_` scripts showing in diff
 **Solution:** Use `run_once_` prefix if script should only run once
 
-**Problem:** External repo (kickstart.nvim) has local changes
+**Problem:** External repo has local changes
 **Solution:** Add cleanup to build step, e.g., `make install && git checkout .`
 
 ### Re-running `run_once_` Scripts
@@ -203,9 +203,9 @@ chezmoi state delete --key=<key>
 `.chezmoiexternal.toml` manages git repos:
 
 ```toml
-[".kickstart.nvim"]
+[".config/nvim"]
     type = "git-repo"
-    url = "https://github.com/user/kickstart.nvim.git"
+    url = "https://github.com/christopherthielen/astronvim.git"
     refreshPeriod = "168h"  # Weekly
 ```
 
@@ -268,7 +268,7 @@ Use `includeIf` for directory-based identity switching:
 ~/.local/share/chezmoi/           # Personal (public)
 ├── .chezmoi.toml.tmpl            # Config with isWork detection
 ├── .chezmoidata/packages.toml    # Brew/apt packages
-├── .chezmoiexternal.toml         # External repos (kickstart.nvim)
+├── .chezmoiexternal.toml         # External repos (astronvim)
 ├── .chezmoiscripts/              # Setup scripts
 ├── dot_config/zsh/               # Zsh config (sources work.zsh if present)
 ├── dot_dotfiles/                 # Creates ~/.dotfiles/ symlinks

@@ -30,7 +30,7 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 ~/.local/share/chezmoi/
 ├── .chezmoi.toml.tmpl              # Config template (prompts for isWork, email, etc.)
 ├── .chezmoidata/packages.toml      # Package lists for brew/apt
-├── .chezmoiexternal.toml           # External git repos (kickstart.nvim)
+├── .chezmoiexternal.toml           # External git repos (astronvim)
 ├── .chezmoiignore                  # Files to skip based on OS/conditions
 ├── bootstrap.sh                    # Initial bootstrap script
 ├── dot_zshrc.tmpl                  # ~/.zshrc
@@ -40,7 +40,7 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 ├── dot_vimrc                       # ~/.vimrc (basic vim settings)
 ├── dot_config/
 │   ├── starship.toml.tmpl          # Starship prompt config
-│   ├── symlink_nvim.tmpl           # Symlink ~/.config/nvim → ~/.kickstart.nvim
+│   ├── (nvim managed via .chezmoiexternal.toml)
 │   └── zsh/
 │       ├── aliases.zsh.tmpl        # Shell aliases
 │       ├── git.zsh                 # Git helper functions
@@ -182,8 +182,8 @@ Scripts run in alphabetical order, filtered by OS guards:
 Chezmoi applies all dotfiles:
 - Templates (`.tmpl`) are rendered with your config data
 - Encrypted files (`.age`) are decrypted using your age key
-- Symlinks are created (e.g., `~/.config/nvim` → `~/.kickstart.nvim`)
-- External repos are cloned (`.chezmoiexternal.toml` → kickstart.nvim)
+- Symlinks are created
+- External repos are cloned (`.chezmoiexternal.toml` → AstroNvim config)
 
 #### 5. `run_onchange_` Scripts (When Content Changes)
 These run when the script content (or referenced data) changes:
@@ -271,9 +271,9 @@ The `run_onchange_install-packages.sh.tmpl` script reads from this data and inst
 The `.chezmoiexternal.toml` manages git repos and archives:
 
 ```toml
-[".kickstart.nvim"]
+[".config/nvim"]
     type = "git-repo"
-    url = "https://github.com/christopherthielen/kickstart.nvim.git"
+    url = "https://github.com/christopherthielen/astronvim.git"
     refreshPeriod = "168h"   # Re-pull weekly
 ```
 

@@ -15,23 +15,9 @@ if [[ -d ~/.config/nvim/.git ]]; then
     git -C ~/.config/nvim pull --rebase upstream main
 fi
 
-if [[ -d ~/.kickstart.nvim/.git ]]; then
-    echo ""
-    echo "Updating kickstart.nvim..."
-    git -C ~/.kickstart.nvim fetch upstream 2>/dev/null || \
-        git -C ~/.kickstart.nvim remote add upstream https://github.com/nvim-lua/kickstart.nvim.git
-    git -C ~/.kickstart.nvim pull --rebase upstream master
-fi
-
 echo ""
 echo "Updating AstroNvim plugins..."
 nvim --headless "+Lazy! sync" +qa
-
-if [[ -d ~/.config/nvim-kickstart ]]; then
-    echo ""
-    echo "Updating kickstart plugins..."
-    NVIM_APPNAME=nvim-kickstart nvim --headless "+Lazy! sync" +qa
-fi
 
 mkdir -p ~/.local/state
 touch ~/.local/state/nvim-updated

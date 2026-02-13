@@ -8,9 +8,3 @@
     type = "git-repo"
     url = "https://github.com/christopherthielen/astronvim.git"
     refreshPeriod = "168h"
-
-# Kickstart.nvim configuration (legacy, accessible via kvim alias)
-[".kickstart.nvim"]
-    type = "git-repo"
-    url = "https://github.com/christopherthielen/kickstart.nvim.git"
-    refreshPeriod = "168h"
