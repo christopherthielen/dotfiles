@@ -24,6 +24,7 @@ formulae = [
     "lazydocker",       # Docker TUI
     "lazygit",          # Git TUI
     "neovim",           # Editor
+    "ripgrep",          # Fast grep (used by nvim live grep)
 
     # Git
     "diff-so-fancy",    # Better git diffs
