@@ -3,7 +3,13 @@
 
 # Note: zsh plugins managed by zinit (auto-installs in .zshrc)
 
-# Kickstart.nvim configuration (cloned to ~/.kickstart.nvim, symlinked to ~/.config/nvim)
+# AstroNvim configuration (primary nvim config)
+[".config/nvim"]
+    type = "git-repo"
+    url = "https://github.com/christopherthielen/astronvim.git"
+    refreshPeriod = "168h"
+
+# Kickstart.nvim configuration (legacy, accessible via kvim alias)
 [".kickstart.nvim"]
     type = "git-repo"
     url = "https://github.com/christopherthielen/kickstart.nvim.git"

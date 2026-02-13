@@ -67,6 +67,8 @@ nvim-update() {
 
     if [[ -d ~/.config/nvim/.git ]]; then
         echo "\nUpdating AstroNvim template..."
+        git -C ~/.config/nvim fetch upstream 2>/dev/null || \
+            git -C ~/.config/nvim remote add upstream https://github.com/AstroNvim/template.git
         git -C ~/.config/nvim pull --rebase upstream main
     fi
 
