@@ -27,7 +27,7 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 ## Directory Structure
 
 ```
-~/.local/share/chezmoi/
+~/.dotfiles/personal/
 ├── .chezmoi.toml.tmpl              # Config template (prompts for isWork, email, etc.)
 ├── .chezmoidata/packages.toml      # Package lists for brew/apt
 ├── .chezmoiexternal.toml           # External git repos (astronvim)
@@ -45,8 +45,6 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 │       ├── aliases.zsh.tmpl        # Shell aliases
 │       ├── git.zsh                 # Git helper functions
 │       └── tools.zsh.tmpl          # Tool integrations (fnm, fzf, etc.)
-├── dot_dotfiles/
-│   └── symlink_personal.tmpl       # Symlink ~/.dotfiles/personal → this repo
 ├── bin/
 │   └── executable_killport         # Kill process on port
 └── .chezmoiscripts/
@@ -160,10 +158,10 @@ The bootstrap process follows this sequence:
 - Prompts for your **age encryption key** (paste from Bitwarden, Ctrl+D to save)
 - Saves key to `~/.config/chezmoi/key.txt`
 - Downloads chezmoi binary to `~/.local/bin/chezmoi`
-- Runs `chezmoi init --apply christopherthielen/dotfiles`
+- Runs `chezmoi init --apply christopherthielen/dotfiles --source ~/.dotfiles/personal`
 
 #### 2. `chezmoi init` Phase
-- Clones this repo to `~/.local/share/chezmoi`
+- Clones this repo to `~/.dotfiles/personal`
 - Processes `.chezmoi.toml.tmpl` → prompts for:
   - **Is this a work machine?** (auto-detects based on hostname/metatron)
   - **Email address** (work or personal default)
@@ -307,7 +305,7 @@ This setup uses `age` encryption for secrets that must remain private even in a 
 
 ```
 ~/.config/chezmoi/key.txt          # Your private key (NEVER commit this)
-~/.local/share/chezmoi/encrypted_*.age  # Encrypted files (safe to commit)
+~/.dotfiles/personal/encrypted_*.age  # Encrypted files (safe to commit)
 ```
 
 **Note:** Work-specific configuration has been moved to a separate internal repo. See [Work Configuration](#work-configuration) below.
@@ -349,9 +347,9 @@ Work-specific dotfiles are managed in a separate internal repository that layers
   - `.gitconfig` has `[include] path = ~/.gitconfig_work`
   - `.zshrc` sources `~/.config/zsh/*.zsh` (includes `work.zsh` if present)
 
-**Symlinks (created by chezmoi):**
-- `~/.dotfiles/personal` → `~/.local/share/chezmoi`
-- `~/.dotfiles/work` → work dotfiles repo (if present)
+**Source locations:**
+- `~/.dotfiles/personal` — this repo (cloned here by bootstrap)
+- `~/.dotfiles/work` — work dotfiles repo (symlinked during work bootstrap)
 
 On work machines, a `chezmoi` wrapper function applies both sources automatically.
 
@@ -360,7 +358,7 @@ On work machines, a `chezmoi` wrapper function applies both sources automaticall
 **What to commit** (safe):
 
 ```
-~/.local/share/chezmoi/           # Your entire source state
+~/.dotfiles/personal/           # Your entire source state
 ├── encrypted_*.age               # Encrypted secrets ✓
 ├── *.tmpl                        # Templates ✓
 ├── .chezmoi*.toml                # Config templates ✓
@@ -376,7 +374,7 @@ On work machines, a `chezmoi` wrapper function applies both sources automaticall
 **To publish:**
 
 ```bash
-cd ~/.local/share/chezmoi
+cd ~/.dotfiles/personal
 git init
 git add .
 git commit -m "Initial chezmoi dotfiles"
