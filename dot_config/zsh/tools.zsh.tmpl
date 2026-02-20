@@ -32,12 +32,6 @@ if (( $+commands[gh] )); then
     eval "$(gh completion -s zsh)"
 fi
 
-# mcfly (history search)
-if (( $+commands[mcfly] )); then
-    export MCFLY_FUZZY=3
-    eval "$(mcfly init zsh)"
-fi
-
 # fx (JSON viewer) completions
 if (( $+commands[fx] )); then
     source <(fx --comp zsh)

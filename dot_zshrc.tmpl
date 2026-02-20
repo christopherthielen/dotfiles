@@ -65,22 +65,19 @@ zinit wait lucid for \
     OMZP::npm \
     OMZP::yarn
 
-# fzf - use native shell integration (better than OMZP::fzf)
+# Third-party plugins
+# zsh-vi-mode: init immediately so we can bind keys after it
+ZVM_INIT_MODE=sourcing
+zinit light jeffreytse/zsh-vi-mode
+
+# fzf - load after zsh-vi-mode so keybindings stick (viins keymap)
 if (( $+commands[fzf] )); then
     eval "$(fzf --zsh)"
 fi
 
-# Third-party plugins
-# zsh-vi-mode: loaded early (not deferred) for immediate vi keybindings
-zinit light jeffreytse/zsh-vi-mode
-
 # Fix Ctrl-[ for terminals using CSI u encoding (Ghostty, Kitty, VS Code)
-# These terminals send ^[[91;5u instead of ^[ for Ctrl-[
-function zvm_after_init() {
-    # Use zvm's handler to properly update cursor style
-    bindkey -M viins '^[[91;5u' zvm_exit_insert_mode
-    bindkey -M vicmd '^[[91;5u' undefined-key  # no-op in normal mode
-}
+bindkey -M viins '^[[91;5u' zvm_exit_insert_mode
+bindkey -M vicmd '^[[91;5u' undefined-key  # no-op in normal mode
 
 # Claude Code CLI completions
 zinit wait lucid for \
