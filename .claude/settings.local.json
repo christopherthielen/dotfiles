@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:anthropic.com)",
+      "WebFetch(domain:chezmoi.io)",
+      "WebFetch(domain:starship.rs)",
+      "mcp__GenAI_MCP_Gateway_dropship__netflix_search_api",
+      "Bash(chezmoi source-path:*)",
+      "Bash(chezmoi data:*)",
+      "Bash(chezmoi diff:*)",
+      "Bash(chezmoi status:*)",
+      "Bash(chezmoi managed:*)",
+      "Bash(chezmoi cat-config:*)",
+      "Bash(chezmoi execute-template:*)",
+      "Bash(chezmoi ignored:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh api:*)",
+      "Bash(brew list:*)",
+      "Bash(brew info:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
