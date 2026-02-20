@@ -10,7 +10,7 @@ fi
 
 # Coder: tell nvim truecolor is available so it skips DCS probing
 # Coder's SSH proxy breaks DCS framing, causing DECRQSS responses to leak into the buffer
-if [[ "$CODER" == "true" && -z "$COLORTERM" ]]; then
+if [[ "$CODER" == "true" && -n "$SSH_CONNECTION" && -z "$COLORTERM" ]]; then
     export COLORTERM=truecolor
 fi
 
