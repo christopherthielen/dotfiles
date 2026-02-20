@@ -2,6 +2,9 @@
 # https://starship.rs/config/
 {{- if .isWork }}
 
+# Put container indicator at the start of the prompt
+format = "${custom.container}$all"
+
 # Disable default container module (we use custom.container instead)
 [container]
 disabled = true
