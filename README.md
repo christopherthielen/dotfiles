@@ -44,7 +44,7 @@ This will prompt for your age key, install Homebrew, and apply all dotfiles.
 │   └── zsh/
 │       ├── aliases.zsh.tmpl        # Shell aliases
 │       ├── git.zsh                 # Git helper functions
-│       └── tools.zsh.tmpl          # Tool integrations (fnm, fzf, mcfly, etc.)
+│       └── tools.zsh.tmpl          # Tool integrations (fnm, fzf, etc.)
 ├── dot_dotfiles/
 │   └── symlink_personal.tmpl       # Symlink ~/.dotfiles/personal → this repo
 ├── bin/
@@ -206,7 +206,6 @@ When you start zsh for the first time:
 - **zinit** auto-installs (plugin manager)
 - OMZ snippets and plugins download
 - **fnm** installs the configured Node.js version
-- **mcfly** imports shell history
 
 ### Script Execution Summary
 
@@ -221,7 +220,7 @@ bootstrap.sh
             ├── run_once_after_setup_darwin.sh        → macOS defaults, asimov
             └── run_once_after_setup.sh.tmpl          → git-lfs, nvim plugins
 zsh (first launch)
-    └── zinit, fnm, mcfly initialize
+    └── zinit, fnm initialize
 ```
 
 ### Manual Workflow (After Bootstrap)
@@ -295,8 +294,7 @@ Zsh plugins are managed by **zinit** (not oh-my-zsh). Zinit auto-installs on fir
 
 **Tool integrations (in `tools.zsh.tmpl`):**
 - fnm (Node version manager)
-- fzf (fuzzy finder - Ctrl-T for files, Alt-C for cd)
-- mcfly (history search - Ctrl-R)
+- fzf (fuzzy finder - Ctrl-R history, Ctrl-T files, Alt-C cd)
 - starship (prompt)
 - autojump (directory jumping - `j <dir>`)
 - tag-ag (jump-to-line aliases for ag)
