@@ -8,6 +8,12 @@ if [[ "$DOTFILES_PROFILE_ZSHRC" == true ]]; then
     setopt xtrace prompt_subst
 fi
 
+# Coder: tell nvim truecolor is available so it skips DCS probing
+# Coder's SSH proxy breaks DCS framing, causing DECRQSS responses to leak into the buffer
+if [[ "$CODER" == "true" && -z "$COLORTERM" ]]; then
+    export COLORTERM=truecolor
+fi
+
 # Path configuration
 {{- if eq .chezmoi.os "darwin" }}
 {{-   if eq .chezmoi.arch "arm64" }}
