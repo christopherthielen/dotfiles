@@ -1,41 +1,10 @@
 {
   "permissions": {
     "allow": [
+      "Bash(*)",
       "WebSearch",
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:anthropic.com)",
-      "WebFetch(domain:chezmoi.io)",
-      "WebFetch(domain:starship.rs)",
-      "mcp__GenAI_MCP_Gateway_dropship__netflix_search_api",
-      "Bash(chezmoi source-path:*)",
-      "Bash(chezmoi data:*)",
-      "Bash(chezmoi diff:*)",
-      "Bash(chezmoi status:*)",
-      "Bash(chezmoi managed:*)",
-      "Bash(chezmoi cat-config:*)",
-      "Bash(chezmoi execute-template:*)",
-      "Bash(chezmoi ignored:*)",
-      "Bash(git status:*)",
-      "Bash(git diff:*)",
-      "Bash(git log:*)",
-      "Bash(git branch:*)",
-      "Bash(git show:*)",
-      "Bash(gh issue view:*)",
-      "Bash(gh repo view:*)",
-      "Bash(gh api:*)",
-      "Bash(brew list:*)",
-      "Bash(brew info:*)",
-      "Bash(git reset:*)",
-      "Bash(git commit:*)",
-      "Bash(git add:*)",
-      "Bash(git push)",
-      "WebFetch(domain:neovim.io)",
-      "WebFetch(domain:ghostty.org)",
-      "Bash(git -C /Users/chris/.local/share/chezmoi status)",
-      "Bash(git -C /Users/chris/.local/share/chezmoi diff)",
-      "Bash(git -C /Users/chris/.local/share/chezmoi add dot_zshrc.tmpl .claude/settings.local.json)",
-      "Bash(git -C /Users/chris/.local/share/chezmoi commit -m \"$\\(cat <<''EOF''\nFix nvim DCS query responses leaking as input in Coder\n\nCoder''s SSH proxy breaks DCS framing, so nvim''s DECRQSS truecolor\nprobe responses get interpreted as typed text \\(190k+ chars in buffer\\).\nSetting COLORTERM=truecolor tells nvim to skip the probe.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git -C /Users/chris/.local/share/chezmoi push)"
+      "WebFetch(*)",
+      "mcp__GenAI_MCP_Gateway_dropship__*"
     ]
   }
 }
