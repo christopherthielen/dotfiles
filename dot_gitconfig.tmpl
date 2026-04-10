@@ -135,5 +135,4 @@
     rh2 = reset HEAD^^ --hard
 
     # Prunes Local Branches that track a remote, where the remote branch has been deleted
-    plb = !git remote prune origin && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
-    plb3 = !git remote prune upstream && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
+    plb = !git fetch --prune origin && git branch -vv | grep '\\[[^]]* gone]' | awk '{ print $1 }' | xargs git branch -D
