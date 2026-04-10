@@ -42,6 +42,8 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
+auto-update-channel=stable
+
 theme = Smyck
 cursor-color = cell-foreground
 cursor-style = block
