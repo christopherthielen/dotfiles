@@ -94,6 +94,7 @@ casks = [
     "google-chrome",
 
     # System
+    "chamburr/tap/glance",
     "dropbox",
     "easy-move-plus-resize",
     "google-drive",
